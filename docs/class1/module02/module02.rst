@@ -497,7 +497,7 @@ nic1 との差分を中心に確認します
 NICをそれぞれデプロイします
 
 .. code-block:: cmdin
-
+  
   cd ~/kubernetes-ingress/deployments/helm-chart
   helm upgrade --install nic1 -f ~/observability/prep/nic1-addvalue.yaml . -n nginx-ingress
   helm upgrade --install nic2 -f ~/observability/prep/nic2-addvalue.yaml . -n nginx-ingress
@@ -505,7 +505,7 @@ NICをそれぞれデプロイします
 デプロイした結果を確認します
 
 .. code-block:: cmdin
-
+  
   helm list -n nginx-ingress
 
 .. code-block:: bash
@@ -520,13 +520,13 @@ NICをそれぞれデプロイします
 Podが正しく作成されていることを確認します
 
 .. code-block:: cmdin
-
-  k get pod -n nginx-ingress
+  
+  kubectl get pod -n nginx-ingress
 
 .. code-block:: bash
   :linenos:
   :caption: 実行結果サンプル
-
+  
   NAME                                                              READY   STATUS    RESTARTS      AGE
   appdos-arbitrator-nginx-appprotect-dos-arbitrator-844bdf64qjw9l   1/1     Running   1 (25h ago)   32h
   nic1-nginx-ingress-69d574d9fb-lnv9f                               1/1     Running   0             81s
@@ -537,20 +537,20 @@ NICへ通信を転送するための設定を行います。
 NodePortの情報を確認します。
 
 .. code-block:: cmdin
-
+  
   kubectl get svc -n nginx-ingress | grep nginx-ingress
 
 .. code-block:: bash
   :linenos:
   :caption: 実行結果サンプル
-
+  
   nic1-nginx-ingress       NodePort    10.104.228.200   <none>        80:31430/TCP,443:32486/TCP   154m
   nic2-nginx-ingress       NodePort    10.106.138.240   <none>        80:30730/TCP,443:31903/TCP   152m
 
 それぞれに表示されているポート番号を確認してください。これらの情報を元に、NGINXの設定を作成します。
 
 .. code-block:: cmdin
-
+  
   ## cd ~/f5j-nsm-lab/prep/
   vi nginx.conf
 
@@ -560,7 +560,7 @@ NodePortの情報を確認します。
   :linenos:
   :caption: nginx.conf
   :emphasize-lines: 7,11,18,22
-
+  
   # TCP/UDP load balancing
   #
   stream {
@@ -590,7 +590,7 @@ NodePortの情報を確認します。
 設定をコピーし、反映します
 
 .. code-block:: cmdin
-
+  
   ## cd ~/f5j-nsm-lab/prep/
   sudo cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf-
   sudo cp nginx.conf /etc/nginx/nginx.conf
