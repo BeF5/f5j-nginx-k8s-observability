@@ -309,6 +309,8 @@ Podが正しく作成され、以下のようになることを確認してく�
 | ここでは実行するコマンドを記載します。詳細は 手順: `NIC環境のセットアップ <https://f5j-nginx-ingress-controller-lab1.readthedocs.io/en/latest/class1/module2/module2.html#id1>`__ を参照ください
 | (イメージのデプロイには5分程度かかる場合があります)
 
+.. code-block:: cmdin
+
   cd ~/kubernetes-ingress/
   cp ~/nginx-repo* .
   ls nginx-repo.*
