@@ -29,8 +29,7 @@ NSMテスト用のNamespaceを作成します
 
 
 こちらのラボでは、HELMを使って環境をセットアップします。
-
-まず、はじめにHELMをinstallします。
+HELMをinstallします。
 
 .. code-block:: cmdin
 
