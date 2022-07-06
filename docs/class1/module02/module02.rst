@@ -408,7 +408,7 @@ NICをデプロイします。
 - 1-3行目でNSMとの接続を有効にしています
 - 6-9行目でNGINX Plusを有効にし、先程作成したImageを指定しています
 - 12-13行目でNAP WAFを、16-17行目でNAP DoSを有効にしています
-- 19行目でIngress Classとして `nginx` を指定しています
+- 19行目でIngress Classとして ``nginx`` を指定しています
 - 56-67行目でPrometheusに必要なパラメータを指定しています
 
 続けて ``nic2`` で指定するパラメータの内容を確認します。
@@ -498,21 +498,39 @@ NICをそれぞれデプロイします
 
 .. code-block:: cmdin
 
-cd ~/kubernetes-ingress/deployments/helm-chart
-helm upgrade --install nic1 -f ~/observability/prep/nic1-addvalue.yaml . -n nginx-ingress
-helm upgrade --install nic2 -f ~/observability/prep/nic2-addvalue.yaml . -n nginx-ingress
+  cd ~/kubernetes-ingress/deployments/helm-chart
+  helm upgrade --install nic1 -f ~/observability/prep/nic1-addvalue.yaml . -n nginx-ingress
+  helm upgrade --install nic2 -f ~/observability/prep/nic2-addvalue.yaml . -n nginx-ingress
 
-helm list -n nginx-ingress
-NAME                    NAMESPACE       REVISION        UPDATED                                 STATUS          CHART                                     APP VERSION
-appdos-arbitrator       nginx-ingress   1               2022-06-28 22:45:48.828679008 +0000 UTC deployed        nginx-appprotect-dos-arbitrator-0.1.0     1.1.0
-nic1                    nginx-ingress   1               2022-06-30 07:43:18.437887299 +0000 UTC deployed        nginx-ingress-0.13.2                      2.2.2
-nic2                    nginx-ingress   1               2022-06-30 07:44:26.615809096 +0000 UTC deployed 
+デプロイした結果を確認します
 
-k get pod -n nginx-ingress
-NAME                                                              READY   STATUS    RESTARTS      AGE
-appdos-arbitrator-nginx-appprotect-dos-arbitrator-844bdf64qjw9l   1/1     Running   1 (25h ago)   32h
-nic1-nginx-ingress-69d574d9fb-lnv9f                               1/1     Running   0             81s
-nic2-nginx-ingress-857cf9d78d-vzh9w                               1/1     Running   0             12s
+.. code-block:: cmdin
+
+  helm list -n nginx-ingress
+
+.. code-block:: bash
+  :linenos:
+  :caption: 実行結果サンプル
+
+  NAME                    NAMESPACE       REVISION        UPDATED                                 STATUS          CHART                                     APP VERSION
+  appdos-arbitrator       nginx-ingress   1               2022-06-28 22:45:48.828679008 +0000 UTC deployed        nginx-appprotect-dos-arbitrator-0.1.0     1.1.0
+  nic1                    nginx-ingress   1               2022-06-30 07:43:18.437887299 +0000 UTC deployed        nginx-ingress-0.13.2                      2.2.2
+  nic2                    nginx-ingress   1               2022-06-30 07:44:26.615809096 +0000 UTC deployed 
+
+Podが正しく作成されていることを確認します
+
+.. code-block:: cmdin
+
+  k get pod -n nginx-ingress
+
+.. code-block:: bash
+  :linenos:
+  :caption: 実行結果サンプル
+
+  NAME                                                              READY   STATUS    RESTARTS      AGE
+  appdos-arbitrator-nginx-appprotect-dos-arbitrator-844bdf64qjw9l   1/1     Running   1 (25h ago)   32h
+  nic1-nginx-ingress-69d574d9fb-lnv9f                               1/1     Running   0             81s
+  nic2-nginx-ingress-857cf9d78d-vzh9w                               1/1     Running   0             12s
 
 NICへ通信を転送するための設定を行います。
 
