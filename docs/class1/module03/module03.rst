@@ -7,7 +7,7 @@
 Helmを使って設定されるDefault設定と、NIC、NSMのステータスを取得するために必要となるPrometheusの設定を追加します。
 
 Prometheusについては以下のページを参照してください。
-`Prometheus Overview <https://prometheus.io/docs/introduction/overview/>`__
+- `Prometheus Overview <https://prometheus.io/docs/introduction/overview/>`__
 
 Prometheusの設定を確認します。
 
@@ -215,7 +215,13 @@ Podが正しく作成されていることを確認します
 ====
 
 Helmを使って設定されるDefault設定では、LokiをデプロイするとKubernets Nodeに保存されているPodのログを取得します。
-取得したログに対し、運用でログの調査が用意となるよう設定を追加します
+取得したログに対し、運用でログの調査が容易となるよう設定を追加します
+
+またこのデプロイでは、Lokiの他、Promtail、Grafanaをデプロイします。
+
+Lokiの設定パラメータについては以下のページを参照してください。
+- `Promtail Scraping <https://grafana.com/docs/loki/latest/clients/promtail/stages/>`__
+- `Loki LogQL <https://grafana.com/docs/loki/latest/logql/log_queries/>`__
 
 HelmでデプロイするLokiの設定を確認します。
 
@@ -589,11 +595,13 @@ Tips1. Helmでパラメータを指定する際の主なデバッグ方法
 | パラメータを指定した場合には以下のような手順に沿って、調査することが有効です
 
 - 1. ドキュメントを参照する。取得するHelm Chartや、Chartが参照するGitHubの内容を確認します
--- `Prometheus helm-charts <https://prometheus-community.github.io/helm-charts/>`__
--- `GitHub helm-charts/prometheus <https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus>`__
--- `GitHub helm-charts/prometheus values.yaml <https://github.com/prometheus-community/helm-charts/blob/main/charts/prometheus/values.yaml>`__
+  - `Prometheus helm-charts <https://prometheus-community.github.io/helm-charts/>`__
+  - `GitHub helm-charts/prometheus <https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus>`__
+  - `GitHub helm-charts/prometheus values.yaml <https://github.com/prometheus-community/helm-charts/blob/main/charts/prometheus/values.yaml>`__
+
 - 2. デフォルトの設定でデプロイする
-- 3. デプロイした内容を確認する
+- 3. デプロイした内容を確認する。helm get コマンドを用いて状態を確認できます
+
 .. code-block:: bash
 
   $ helm get -h
@@ -618,9 +626,9 @@ Tips1. Helmでパラメータを指定する際の主なデバッグ方法
 
 - 4. 1. や 3. の内容を元に設定ファイルパラメータを記述する
 - 5. 4. で記述した内容が正しく反映されることを3. の手順を参考に確認する
--- ``-f`` で指定することで、ファイルの形式でオプションパラメータを指定することができます
--- ``--set`` で、パラメータの値を個別に指定することができます
--- ``--set-file`` で、対象のパラメータに対し、ファイル形式で値を指定することができます
+  - ``-f`` で指定することで、ファイルの形式でオプションパラメータを指定することができます
+  - ``--set`` で、パラメータの値を個別に指定することができます
+  - ``--set-file`` で、対象のパラメータに対し、ファイル形式で値を指定することができます
 - 6. 意図した動作となっていることを確認する
 
 Tips2. Helmでデプロイするリソースの詳細
