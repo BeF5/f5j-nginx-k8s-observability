@@ -12,19 +12,15 @@ F5 Labs - Index
 座学資料
 ========
 
-このラボはNGINX Service Meshのインストールから各種設定を行っていただけます。
+このラボはNGINX Ingress ControllerやNGINX Service Meshと各種監視ツールの設定方法などご確認いただけます。
 
-NGINX Service Meshの基本的な動作や仕様について紹介しております。
-
-| 基本的な解説資料は以下を参照してください。
+| 関連する情報は以下を参照してください。
 | (ラボの実施内容と異なりますが、参考資料としてご利用いただけます)
 
-Webinar(プレゼンテーション・デモ)
+参考資料
 -----
 
-- `サービスメッシュはなぜ必要？NGINX Service Mesh 技術解説セミナー <https://www.nginx.co.jp/resources/webinars/service-mesh/>`__
-
-
+- `PrometheusとGrafanaでNGINX Plusを可視化する方法 <https://www.nginx.co.jp/blog/how-to-visualize-nginx-plus-with-prometheus-and-grafana/>`__
 
 .. toctree::
    :maxdepth: 3

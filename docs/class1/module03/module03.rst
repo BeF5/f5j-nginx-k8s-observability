@@ -662,10 +662,12 @@ Helmを使ってデプロイしたPrometheusについて、どのようなステ
   
   helm get all prometheus -n monitor | less
 
+
 .. code-block:: bash
   :linenos:
   :caption: 実行結果サンプル
-
+  :emphasize-lines: 1-7,17,36-37
+  
   NAME: prometheus
   LAST DEPLOYED: Thu Jun 30 08:38:08 2022
   NAMESPACE: monitor
@@ -685,82 +687,31 @@ Helmを使ってデプロイしたPrometheusについて、どのようなステ
   COMPUTED VALUES:
   alertRelabelConfigs: null
   alertmanager:
-    affinity: {}
-    baseURL: http://localhost:9093
-    clusterPeers: []
-    configFileName: alertmanager.yml
-    configFromSecret: ""
-    configMapOverrideName: ""
-    containerSecurityContext: {}
-    deploymentAnnotations: {}
-    dnsConfig: {}
-    emptyDir:
-      sizeLimit: ""
-    enabled: true
-    extraArgs: {}
-    extraConfigmapMounts: []
-    extraEnv: {}
-    extraInitContainers: []
-    extraSecretMounts: []
-    image:
-      pullPolicy: IfNotPresent
-      repository: quay.io/prometheus/alertmanager
-      tag: v0.23.0
-    ingress:
-      annotations: {}
-      enabled: false
-      extraLabels: {}
-      extraPaths: []
-      hosts: []
-      path: /
-      pathType: Prefix
-      tls: []
-    name: alertmanager
-    nodeSelector: {}
+  **省略** 
+
     persistentVolume:
       accessModes:
       - ReadWriteOnce
       annotations: {}
       enabled: false
-      existingClaim: ""
-      mountPath: /data
-      size: 2Gi
-      subPath: ""
   **省略**
+
   extraScrapeConfigs: |+
     - job_name: 'nginx-mesh-sidecars'
       kubernetes_sd_configs:
         - role: pod
       relabel_configs:
-        - source_labels: [__meta_kubernetes_pod_container_name]
-          action: keep
-          regex: nginx-mesh-sidecar
-        - action: labelmap
-          regex: __meta_kubernetes_pod_label_nsm_nginx_com_(.+)
-        - action: labeldrop
-          regex: __meta_kubernetes_pod_label_nsm_nginx_com_(.+)
-        - action: labelmap
-          regex: __meta_kubernetes_pod_label_(.+)
-        - source_labels: [__meta_kubernetes_namespace]
-          action: replace
-          target_label: namespace
-        - source_labels: [__meta_kubernetes_pod_name]
-          action: replace
-          target_label: pod
-    - job_name: 'nginx-plus-ingress'
   **省略**
+
   HOOKS:
   MANIFEST:
   ---
   # Source: prometheus/charts/kube-state-metrics/templates/serviceaccount.yaml
   apiVersion: v1
   kind: ServiceAccount
-  metadata:
-  NOTES:
-  
-  NOTES:
-  The Prometheus server can be accessed via port 80 on the following DNS name from within your cluster:
-  prometheus-server.monitor.svc.cluster.local
 
+- ``helm get all`` を指定すると全ての情報を確認することができます
+- helm 実行時に入力した情報は ``USER-SUPPLIED VALUES`` に表示されます
+- ``COMPUTED VALUES`` に実際に適用される情報が表示されますので、指定した値が意図した通りとなっているか確認してください
 
 
