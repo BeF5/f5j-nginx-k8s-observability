@@ -99,7 +99,7 @@ DataSourceにPrometheusの追加をします
    .. image:: ./media/grafana-add-prometheus.jpg
       :width: 400
 
-URL に ``http://prometheus-server`` と入力し、 ``Save & test`` をクリックしてください
+URL に `http://prometheus-server <http://prometheus-server>`__ と入力し、 ``Save & test`` をクリックしてください
 
    .. image:: ./media/grafana-add-prometheus2.jpg
       :width: 400
@@ -109,8 +109,8 @@ DataSourceにJaegerの追加をします
    .. image:: ./media/grafana-add-jaeger.jpg
       :width: 400
 
-URL に ``http://jaeger-query:16686`` と入力し、 
-``Filter by Trace ID`` 、 ``Filter by Span ID`` を有効にしてください。
+URL に `http://jaeger-query:16686 <http://jaeger-query:16686>`__ と入力し、 
+``Filter by Trace ID`` 、 ``Filter by Span ID`` 、 ``Enable Node Graph`` を有効にしてください。
 その後、 ``Save & test`` をクリックしてください。
 
    .. image:: ./media/grafana-add-jaeger2.jpg

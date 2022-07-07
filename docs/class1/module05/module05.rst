@@ -51,7 +51,6 @@ Jsonの読み込みに成功すると、以下の画面が表示されるので 
    .. image:: ./media/grafana-import-loki-dashboard.jpg
       :width: 400
 
-
 2. デモトラフィックの実行
 ====
 
@@ -86,11 +85,56 @@ Jsonの読み込みに成功すると、以下の画面が表示されるので 
 1. NIC Dashboard
 ----
 
+画面左上 ``NIC`` から対象のNICを選択できます。情報を確認したい ``NIC`` を選択してください
+
+ .. image:: ./media/grafana-nic-selection.jpg
+    :width: 400
+
+``Success Rates Over Time`` のグラフを参考に詳細を確認します
+
+ .. image:: ./media/grafana-nic-successrate-menu.jpg
+    :width: 400
+
+- ``View`` : 対象の項目を画面全体で確認できます
+
+ .. image:: ./media/grafana-nic-successrate-view.jpg
+    :width: 400
+
+- ``Edit`` : 表示内容の条件など詳細を確認、変更することができます。変更内用を表示に反映する場合には右上の ``Apply`` 、 Dashboardに反映する場合には ``Save`` をクリックしてください。変更を破棄する場合には ``Discard`` をクリックしてください。
+
+ .. image:: ./media/grafana-nic-successrate-edit.jpg
+    :width: 400
+
+- ``Explore`` : 表示の詳細を確認できます
+
+ .. image:: ./media/grafana-nic-successrate-explore.jpg
+    :width: 400
+
+- ``Inspect`` > ``Data`` : 表示内容の値を確認できます
+
+ .. image:: ./media/grafana-nic-successrate-inspect_data.jpg
+    :width: 400
+
+
 2. NSM Dashboard
 ----
+ .. image:: ./media/grafana-nsm-dashboard-top.jpg
+    :width: 400
 
 3. Loki Dashboard
 ----
 
+ .. image:: ./media/grafana-loki-dashboard-top.jpg
+    :width: 400
+
 4. Jaeger の確認
 ----
+
+ .. image:: ./media/grafana-explore-jaeger.jpg
+    :width: 400
+
+ .. image:: ./media/grafana-explore-jaeger2.jpg
+    :width: 400
+
+ .. image:: ./media/grafana-explore-jaeger3.jpg
+    :width: 400
