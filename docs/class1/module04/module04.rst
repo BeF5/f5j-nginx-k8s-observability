@@ -9,7 +9,7 @@
 
 .. code-block:: cmdin
 
-  cd ~/observability/prep/
+  cd ~/f5j-nginx-observability-lab/prep/nic
   # for access observability tools
   kubectl apply -f monitor-jaeger-vs.yaml
   kubectl apply -f monitor-loki-grafana-vs.yaml
@@ -24,6 +24,8 @@
   kubectl apply -f ap-logconf.yaml
   kubectl apply -f waf.yaml
   kubectl apply -f staging-bookinfo-nap-vs.yaml
+
+デプロイした結果を確認します
 
 .. code-block:: cmdin
 
