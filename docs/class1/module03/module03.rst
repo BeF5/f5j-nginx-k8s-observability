@@ -374,6 +374,7 @@ HelmでデプロイするLokiの設定を確認します。
         target_label: 'host'
 
 その他Lokiの設定パラメータは以下を参照してください
+
 - `GitHub helm-charts/charts/loki-stack/ <https://github.com/grafana/helm-charts/tree/main/charts/loki-stack>`__
 - `GitHub helm-charts/charts/loki-stack/values.yaml <https://github.com/grafana/helm-charts/blob/main/charts/loki-stack/values.yaml>`__
 
@@ -442,6 +443,7 @@ Podが正しく作成されていることを確認します
 | HelmでデプロイするJaegerの設定を確認します。
 
 Jaegerについては以下を参照してください。
+
 - `JAEGER Getting Started <https://www.jaegertracing.io/docs/next-release/getting-started/>`__
 
 
@@ -541,68 +543,6 @@ Podが正しく作成されていることを確認します
   service/jaeger-query                    ClusterIP   None             <none>        16686/TCP,16685/TCP                      82s
 
 
-4. Grafana の設定
-====
-
-踏み台サーバのデスクトップのショートカットから ``Chrome`` を実行し、以下のURLにアクセスします
-
-- `http://grafana.example.com:8080/ <http://grafana.example.com:8080/>`__
-
-ログイン画面が表示されます。
-
-   .. image:: ./media/grafana-login.jpg
-      :width: 400
-
-Grafanaにログインするためにパスワードの情報を取得します。
-
-.. code-block:: cmdin
-  
-  kubectl get secret --namespace monitor loki-grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
-
-.. code-block:: bash
-  :linenos:
-  :caption: 実行結果サンプル
-
-  jFQSgKatKfJQ816K81qkPYIB2v6FvYjyAPE5mnpt
-
-
-ユーザ名 ``admin`` 、そして確認したパスワードを入力しログインしてください
-
-   .. image:: ./media/grafana-login2.jpg
-      :width: 400
-
-画面左メニューの ``Configuration`` > ``DataSource`` を開き、 ``Add data source`` をクリックしてください
-
-   .. image:: ./media/grafana-add-datasource.jpg
-      :width: 400
-
-DataSourceにPrometheusの追加をします
-
-   .. image:: ./media/grafana-add-prometheus.jpg
-      :width: 400
-
-URL に ``http://prometheus-server`` と入力し、 ``Save & test`` をクリックしてください
-
-   .. image:: ./media/grafana-add-prometheus2.jpg
-      :width: 400
-
-DataSourceにJaegerの追加をします
-
-   .. image:: ./media/grafana-add-jaeger.jpg
-      :width: 400
-
-URL に ``http://jaeger-query:16686`` と入力し、 ``Save & test`` をクリックしてください
-
-   .. image:: ./media/grafana-add-jaeger2.jpg
-      :width: 400
-
-Lokiはデプロイ時点で設定されています。以下のような結果になることを確認してください
-
-   .. image:: ./media/grafana-datasource-list.jpg
-      :width: 400
-
-   .. image:: ./media/grafana-loki.jpg
-      :width: 400
 
 
 Tips1. Helmでパラメータを指定する際の主なデバッグ方法
@@ -620,27 +560,27 @@ Tips1. Helmでパラメータを指定する際の主なデバッグ方法
 - 2. デフォルトの設定でデプロイする
 - 3. デプロイした内容を確認する。helm get コマンドを用いて状態を確認できます
 
-.. code-block:: cmdin
-
-  $ helm get -h
+  .. code-block:: cmdin
   
-  This command consists of multiple subcommands which can be used to
-  get extended information about the release, including:
-  
-  - The values used to generate the release
-  - The generated manifest file
-  - The notes provided by the chart of the release
-  - The hooks associated with the release
-  
-  Usage:
-    helm get [command]
-  
-  Available Commands:
-    all         download all information for a named release
-    hooks       download all hooks for a named release
-    manifest    download the manifest for a named release
-    notes       download the notes for a named release
-    values      download the values file for a named release
+    $ helm get -h
+    
+    This command consists of multiple subcommands which can be used to
+    get extended information about the release, including:
+    
+    - The values used to generate the release
+    - The generated manifest file
+    - The notes provided by the chart of the release
+    - The hooks associated with the release
+    
+    Usage:
+      helm get [command]
+    
+    Available Commands:
+      all         download all information for a named release
+      hooks       download all hooks for a named release
+      manifest    download the manifest for a named release
+      notes       download the notes for a named release
+      values      download the values file for a named release
 
 - 4. 1. や 3. の内容を元に設定ファイルパラメータを記述する
 - 5. 4. で記述した内容が正しく反映されることを3. の手順を参考に確認する

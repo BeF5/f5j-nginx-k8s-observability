@@ -9,22 +9,21 @@
 
 .. code-block:: cmdin
 
-  ## cd ~/observability/prep/
-  
+  cd ~/observability/prep/
   # for access observability tools
-  monitor-jaeger-vs.yaml
-  monitor-loki-grafana-vs.yaml
-  monitor-prometheus-vs.yaml
+  kubectl apply -f monitor-jaeger-vs.yaml
+  kubectl apply -f monitor-loki-grafana-vs.yaml
+  kubectl apply -f monitor-prometheus-vs.yaml
   
   # for changing NIC custom log format
-  nic1-custom_log_format.yaml
-  nic2-custom_log_format.yaml
+  kubectl apply -f nic1-custom_log_format.yaml
+  kubectl apply -f nic2-custom_log_format.yaml
   
   # for access bookinfo application with NAP WAF / custom log format
-  simple-ap.yaml
-  ap-logconf.yaml
-  waf.yaml
-  staging-bookinfo-nap-vs.yaml
+  kubectl apply -f simple-ap.yaml
+  kubectl apply -f ap-logconf.yaml
+  kubectl apply -f waf.yaml
+  kubectl apply -f staging-bookinfo-nap-vs.yaml
 
 .. code-block:: cmdin
 
@@ -59,7 +58,67 @@
       :width: 400
 
 2. Grafana Datasouce の追加
+====
 
+踏み台サーバのデスクトップのショートカットから ``Chrome`` を実行し、以下のURLにアクセスします
+
+- `http://grafana.example.com:8080/ <http://grafana.example.com:8080/>`__
+
+ログイン画面が表示されます。
+
+   .. image:: ./media/grafana-login.jpg
+      :width: 400
+
+Grafanaにログインするためにパスワードの情報を取得します。
+
+.. code-block:: cmdin
+  
+  kubectl get secret --namespace monitor loki-grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+
+.. code-block:: bash
+  :linenos:
+  :caption: 実行結果サンプル
+
+  jFQSgKatKfJQ816K81qkPYIB2v6FvYjyAPE5mnpt
+
+
+ユーザ名 ``admin`` 、そして確認したパスワードを入力しログインしてください
+
+   .. image:: ./media/grafana-login2.jpg
+      :width: 400
+
+画面左メニューの ``Configuration`` > ``DataSource`` を開き、 ``Add data source`` をクリックしてください
+
+   .. image:: ./media/grafana-add-datasource.jpg
+      :width: 400
+
+DataSourceにPrometheusの追加をします
+
+   .. image:: ./media/grafana-add-prometheus.jpg
+      :width: 400
+
+URL に ``http://prometheus-server`` と入力し、 ``Save & test`` をクリックしてください
+
+   .. image:: ./media/grafana-add-prometheus2.jpg
+      :width: 400
+
+DataSourceにJaegerの追加をします
+
+   .. image:: ./media/grafana-add-jaeger.jpg
+      :width: 400
+
+URL に ``http://jaeger-query:16686`` と入力し、 ``Save & test`` をクリックしてください
+
+   .. image:: ./media/grafana-add-jaeger2.jpg
+      :width: 400
+
+Lokiはデプロイ時点で設定されています。以下のような結果になることを確認してください
+
+   .. image:: ./media/grafana-datasource-list.jpg
+      :width: 400
+
+   .. image:: ./media/grafana-loki.jpg
+      :width: 400
 
 3. サンプルアプリケーションのデプロイ
 ====
