@@ -59,7 +59,7 @@ Jsonの読み込みに成功すると、以下の画面が表示されるので 
 
 .. code-block:: cmdin
   
-  while : ; do echo "Demo Traffic Start" ; \
+  while : ; do echo "Demo Traffic Start!!" ; \
   bash ~/f5j-nginx-observability-lab/demotraffic/attack-to-bookinfo.sh ; \
   bash ~/f5j-nginx-observability-lab/demotraffic/dummy-access-to-bookinfo.sh ; \
   bash ~/f5j-nginx-observability-lab/demotraffic/other-traffic.sh ; \
@@ -68,6 +68,17 @@ Jsonの読み込みに成功すると、以下の画面が表示されるので 
 .. code-block:: bash
   :linenos:
   :caption: 実行結果サンプル
+
+  Demo Traffic Start!!
+  Thu Jul  7 12:11:53 UTC 2022
+  attack to bookinfo start
+  done
+  Thu Jul  7 12:12:13 UTC 2022
+  dummy access to bookinfo start
+  done
+  Thu Jul  7 12:12:33 UTC 2022
+  other traffic start
+  ... (以下ループ)
 
 3. ステータスの確認
 ====

@@ -44,19 +44,19 @@
 踏み台ホストのブラウザ(Chrome)よりそれぞれのサービスのURLへアクセスいただくことにより、画面をご覧頂くことが可能です。
 
 
-- Prometheus: ``http://prometheus.example.com:8080/``
+- Prometheus: `http://prometheus.example.com:8080/ <http://prometheus.example.com:8080/>`__
 
    .. image:: ./media/prometheus-top.jpg
       :width: 400
 
-- Jaeger: ``http://jaeger.example.com:8080/``
+- Jaeger: `http://jaeger.example.com:8080/ <http://jaeger.example.com:8080/>`__
 
    .. image:: ./media/jaeger-top.jpg
       :width: 400
 
-- Grafana: ``http://grafana.example.com:8080/``
+- Grafana: `http://grafana.example.com:8080/ <http://grafana.example.com:8080/>`__
 
-   .. image:: ./media/grafana-top.jpg
+   .. image:: ./media/grafana-login.jpg
       :width: 400
 
 2. Grafana Datasouce の追加
@@ -89,7 +89,7 @@ Grafanaにログインするためにパスワードの情報を取得します�
    .. image:: ./media/grafana-login2.jpg
       :width: 400
 
-画面左メニューの ``Configuration`` > ``DataSource`` を開き、 ``Add data source`` をクリックしてください
+画面左メニューの ``Configuration (歯車のマーク)`` > ``DataSource`` を開き、 ``Add data source`` をクリックしてください
 
    .. image:: ./media/grafana-add-datasource.jpg
       :width: 400
@@ -109,7 +109,9 @@ DataSourceにJaegerの追加をします
    .. image:: ./media/grafana-add-jaeger.jpg
       :width: 400
 
-URL に ``http://jaeger-query:16686`` と入力し、 ``Save & test`` をクリックしてください
+URL に ``http://jaeger-query:16686`` と入力し、 
+``Filter by Trace ID`` 、 ``Filter by Span ID`` を有効にしてください。
+その後、 ``Save & test`` をクリックしてください。
 
    .. image:: ./media/grafana-add-jaeger2.jpg
       :width: 400

@@ -94,7 +94,8 @@ HELMをinstallします。
 
 .. code-block:: cmdin
 
-  cat ~/f5j-nginx-observability-lab/prep/helm/nsm-values.yaml
+  ## cd ~/f5j-nginx-observability-lab/prep/helm/
+  cat nsm-values.yaml
 
 .. code-block:: bash
   :linenos:
@@ -173,7 +174,8 @@ NSMをデプロイします
 .. code-block:: cmdin
 
   cd ~/nginx-service-mesh/helm-chart
-  helm upgrade --install nsm -f ~/f5j-nginx-observability-lab/prep/helm/nsm-values.yaml . \
+  cp ~/f5j-nginx-observability-lab/prep/helm/nsm-values.yaml .
+  helm upgrade --install nsm -f nsm-values.yaml . \
    --namespace nginx-mesh \
    --create-namespace
 
@@ -327,7 +329,8 @@ NICをデプロイします。
 
 .. code-block:: cmdin
 
-  cat ~/f5j-nginx-observability-lab/prep/helm/nic1-addvalue.yaml
+  ## cd ~/f5j-nginx-observability-lab/prep/helm/
+  cat nic1-addvalue.yaml
 
 .. code-block:: bash
   :linenos:
@@ -413,7 +416,8 @@ nic1 との差分を中心に確認します
 
 .. code-block:: cmdin
 
-  cat ~/f5j-nginx-observability-lab/prep/helm/nic2-addvalue.yaml
+  ## cd ~/f5j-nginx-observability-lab/prep/helm/
+  cat nic2-addvalue.yaml
 
 .. code-block:: bash
   :linenos:
@@ -496,8 +500,10 @@ NICをそれぞれデプロイします
 .. code-block:: cmdin
   
   cd ~/kubernetes-ingress/deployments/helm-chart
-  helm upgrade --install nic1 -f ~/f5j-nginx-observability-lab/prep/helm/nic1-addvalue.yaml . -n nginx-ingress
-  helm upgrade --install nic2 -f ~/f5j-nginx-observability-lab/prep/helm/nic2-addvalue.yaml . -n nginx-ingress
+  cp ~/f5j-nginx-observability-lab/prep/helm/nic1-addvalue.yaml .
+  cp ~/f5j-nginx-observability-lab/prep/helm/nic2-addvalue.yaml .
+  helm upgrade --install nic1 -f nic1-addvalue.yaml . -n nginx-ingress
+  helm upgrade --install nic2 -f nic2-addvalue.yaml . -n nginx-ingress
 
 デプロイした結果を確認します
 

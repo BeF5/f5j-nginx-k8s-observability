@@ -14,7 +14,8 @@ Prometheusの設定を確認します。
 
 .. code-block:: cmdin
 
-  cat ~/f5j-nginx-observability-lab/prep/helm/prometheus-nginx-mesh-and-ingress-scrape-config.yaml
+  ## cd ~/f5j-nginx-observability-lab/prep/helm/
+  cat prometheus-nginx-mesh-and-ingress-scrape-config.yaml
 
 .. code-block:: bash
   :linenos:
@@ -103,7 +104,8 @@ Prometheusの設定を確認します。
 
 .. code-block:: cmdin
 
-  cat ~/f5j-nginx-observability-lab/prep/helm/prometheus-addvalue.yaml
+  ## cd ~/f5j-nginx-observability-lab/prep/helm/
+  cat prometheus-addvalue.yaml
 
 .. code-block:: bash
   :linenos:
@@ -121,10 +123,11 @@ Prometheusをデプロイします
 
 .. code-block:: cmdin
 
+  ## cd ~/f5j-nginx-observability-lab/prep/helm/
   helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
   helm upgrade --install prometheus prometheus-community/prometheus \
-  -f ~/f5j-nginx-observability-lab/prep/helm/prometheus-addvalue.yaml \
-   --set-file extraScrapeConfigs=~/f5j-nginx-observability-lab/prep/helm/prometheus-nginx-mesh-and-ingress-scrape-config.yaml \
+  -f prometheus-addvalue.yaml \
+   --set-file extraScrapeConfigs=prometheus-nginx-mesh-and-ingress-scrape-config.yaml \
    --namespace monitor \
    --create-namespace
 
@@ -229,7 +232,8 @@ HelmでデプロイするLokiの設定を確認します。
 
 .. code-block:: cmdin
 
-  cat ~/f5j-nginx-observability-lab/prep/helm/loki-scrape.yaml
+  ## cd ~/f5j-nginx-observability-lab/prep/helm/
+  cat loki-scrape.yaml
 
 .. code-block:: bash
   :linenos:
@@ -356,7 +360,8 @@ HelmでデプロイするLokiの設定を確認します。
 
 .. code-block:: cmdin
 
-  cat ~/f5j-nginx-observability-lab/prep/helm/loki-scrape-addvalue.yaml
+  ## cd ~/f5j-nginx-observability-lab/prep/helm/
+  cat loki-scrape-addvalue.yaml
 
 .. code-block:: bash
   :linenos:
@@ -381,11 +386,12 @@ Lokiをデプロイします
 
 .. code-block:: cmdin
 
+  ## cd ~/f5j-nginx-observability-lab/prep/helm/
   helm repo add grafana https://grafana.github.io/helm-charts
   helm upgrade --install loki grafana/loki-stack -n monitor \
    --set grafana.enabled=true \
-   --set-file promtail.config.snippets.extraScrapeConfigs=~/f5j-nginx-observability-lab/prep/helm/loki-scrape-addvalue.yaml \
-   --set-file promtail.config.snippets.scrapeConfigs=~/f5j-nginx-observability-lab/prep/helm/loki-scrape.yaml 
+   --set-file promtail.config.snippets.extraScrapeConfigs=loki-scrape-addvalue.yaml \
+   --set-file promtail.config.snippets.scrapeConfigs=loki-scrape.yaml 
 
 .. code-block:: bash
   :linenos:
@@ -448,7 +454,8 @@ Jaegerについては以下を参照してください。
 
 .. code-block:: cmdin
 
-  cat ~/f5j-nginx-observability-lab/prep/helm/jaeger-addvalues.yaml
+  ## cd ~/f5j-nginx-observability-lab/prep/helm/
+  cat jaeger-addvalues.yaml
 
 .. code-block:: bash
   :linenos:
@@ -485,8 +492,9 @@ Jaegerをデプロイします
 
 .. code-block:: cmdin
 
+  ## cd ~/f5j-nginx-observability-lab/prep/helm/
   helm repo add jaegertracing https://jaegertracing.github.io/helm-charts
-  helm upgrade --install jaeger jaegertracing/jaeger -n monitor -f ~/f5j-nginx-observability-lab/prep/helm/jaeger-addvalues.yaml
+  helm upgrade --install jaeger jaegertracing/jaeger -n monitor -f jaeger-addvalues.yaml
 
 .. code-block:: bash
   :linenos:
