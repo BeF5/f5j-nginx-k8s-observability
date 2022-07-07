@@ -226,7 +226,7 @@ HelmでデプロイするLokiの設定を確認します。
 .. code-block:: bash
   :linenos:
   :caption: 実行結果サンプル
-  :emphasize-lines: 1-3, 6-9, 12-13, 16-17, 19, 47-51, 56-67 
+  :emphasize-lines: 1, 2-8, 10-26, 28-48, 50-51
 
   - job_name: kubernetes-pods
     pipeline_stages:
@@ -339,6 +339,10 @@ HelmでデプロイするLokiの設定を確認します。
         - __meta_kubernetes_pod_container_name
         target_label: __path__
 
+- 50-51行目で ``kubernetes_sd_configs`` の ``pod`` を指定し、各Nodeに記録されているPodのログを取得する設定となっています。50行目以降がHelmでデプロイする際のデフォルトの設定となります
+- 2行目の ``cri`` で取得したログを、3-8行目で json でパースし、log 部分を抽出します
+- 10-26行目は、8行目までで抽出した log の内容に対し、 match ステージでNGINXの ``accesslog`` の条件を指定しログを抽出します
+- 28-48行目は、10-26行目同様に match ステージでNAP WAFの ``securitylog`` の条件を指定しログを抽出します
 
 参考の追加設定としてSyslog Serverの設定を追加します
 
@@ -349,7 +353,6 @@ HelmでデプロイするLokiの設定を確認します。
 .. code-block:: bash
   :linenos:
   :caption: 実行結果サンプル
-  :emphasize-lines: 1-3, 6-9, 12-13, 16-17, 19, 47-51, 56-67 
 
   # this is extraScrapeCOnfig
   - job_name: syslog
@@ -374,7 +377,6 @@ Lokiをデプロイします
 .. code-block:: bash
   :linenos:
   :caption: 実行結果サンプル
-  :emphasize-lines: 1-3, 6-9, 12-13, 16-17, 19, 47-51, 56-67 
 
   Release "loki" does not exist. Installing it now.
   W0630 10:11:21.164451  201978 warnings.go:70] policy/v1beta1 PodSecurityPolicy is deprecated in v1.21+, unavailable in v1.25+
@@ -420,18 +422,6 @@ Podが正しく作成されていることを確認します
   loki-promtail-gcqck                             1/1     Running   0          2m19s
   loki-promtail-xfznr                             1/1     Running   0          2m19s
 
-Grafanaにログインするためにパスワードの情報を取得します。後ほど管理画面にログインする際に利用ください
-
-.. code-block:: cmdin
-  
-  kubectl get secret --namespace monitor loki-grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
-
-.. code-block:: bash
-  :linenos:
-  :caption: 実行結果サンプル
-
-  jFQSgKatKfJQ816K81qkPYIB2v6FvYjyAPE5mnpt
-
 3. Jaegerのデプロイ
 ====
 
@@ -445,7 +435,7 @@ Grafanaにログインするためにパスワードの情報を取得します�
 .. code-block:: bash
   :linenos:
   :caption: 実行結果サンプル
-  :emphasize-lines: 1-3, 6-9, 12-13, 16-17, 19, 47-51, 56-67 
+  :emphasize-lines: 6-7
 
   provisionDataStore:
     cassandra: false
@@ -466,6 +456,8 @@ Grafanaにログインするためにパスワードの情報を取得します�
   agent:
     enabled: false
 
+- 6-7行目で ``allInOne`` の形式でデプロイすることを指定し、その他パラメータでふおうな設定を解除します
+
 Jaegerをデプロイします
 
 .. code-block:: cmdin
@@ -476,7 +468,6 @@ Jaegerをデプロイします
 .. code-block:: bash
   :linenos:
   :caption: 実行結果サンプル
-  :emphasize-lines: 1-3, 6-9, 12-13, 16-17, 19, 47-51, 56-67 
   
   Release "jaeger" does not exist. Installing it now.
   NAME: jaeger
@@ -531,22 +522,64 @@ Podが正しく作成されていることを確認します
 4. Grafana の設定
 ====
 
-#########################
-# 手順
-1. 踏み台
-http://grafana.example.com:8080/datasources
+踏み台サーバのデスクトップのショートカットから ``Chrome`` を実行し、以下のURLにアクセスします
+- `http://grafana.example.com:8080/ <http://grafana.example.com:8080/>`__
 
-2.
-data source に追加
+ログイン画面が表示されます。
 
-http://prometheus-server
-http://jaeger-query:16686
+   .. image:: ./media/grafana-login.jpg
+      :width: 400
+
+Grafanaにログインするためにパスワードの情報を取得します。
+
+.. code-block:: cmdin
+  
+  kubectl get secret --namespace monitor loki-grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+
+.. code-block:: bash
+  :linenos:
+  :caption: 実行結果サンプル
+
+  jFQSgKatKfJQ816K81qkPYIB2v6FvYjyAPE5mnpt
 
 
-ubuntu@ip-10-1-1-8:~/monitor$ vi monitor-jaeger-vs.yaml
-ubuntu@ip-10-1-1-8:~/monitor$ k apply -f monitor-jaeger-vs.yaml
-virtualserver.k8s.nginx.org/loki-jaeger-vs created
+ユーザ名 ``admin`` 、そして確認したパスワードを入力しログインしてください
 
+   .. image:: ./media/grafana-login2.jpg
+      :width: 400
+
+画面左メニューの ``Configuration`` > ``DataSource`` を開き、 ``Add data source`` をクリックしてください
+
+   .. image:: ./media/grafana-add-datasource.jpg
+      :width: 400
+
+DataSourceにPrometheusの追加をします
+
+   .. image:: ./media/grafana-add-prometheus.jpg
+      :width: 400
+
+URL に ``http://prometheus-server`` と入力し、 ``Save & test`` をクリックしてください
+
+   .. image:: ./media/grafana-add-prometheus2.jpg
+      :width: 400
+
+DataSourceにJaegerの追加をします
+
+   .. image:: ./media/grafana-add-jaeger.jpg
+      :width: 400
+
+URL に ``http://jaeger-query:16686`` と入力し、 ``Save & test`` をクリックしてください
+
+   .. image:: ./media/grafana-add-jaeger2.jpg
+      :width: 400
+
+Lokiはデプロイ時点で設定されています。以下のような結果になることを確認してください
+
+   .. image:: ./media/grafana-datasource-list.jpg
+      :width: 400
+
+   .. image:: ./media/grafana-loki.jpg
+      :width: 400
 
 
 Tips1. Helmでパラメータを指定する際の主なデバッグ方法
@@ -556,14 +589,11 @@ Tips1. Helmでパラメータを指定する際の主なデバッグ方法
 | パラメータを指定した場合には以下のような手順に沿って、調査することが有効です
 
 - 1. ドキュメントを参照する。取得するHelm Chartや、Chartが参照するGitHubの内容を確認します
-
-`Prometheus helm-charts <https://prometheus-community.github.io/helm-charts/>`__
-`GitHub helm-charts/prometheus <https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus>`__
-`GitHub helm-charts/prometheus values.yaml <https://github.com/prometheus-community/helm-charts/blob/main/charts/prometheus/values.yaml>`__
-
+-- `Prometheus helm-charts <https://prometheus-community.github.io/helm-charts/>`__
+-- `GitHub helm-charts/prometheus <https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus>`__
+-- `GitHub helm-charts/prometheus values.yaml <https://github.com/prometheus-community/helm-charts/blob/main/charts/prometheus/values.yaml>`__
 - 2. デフォルトの設定でデプロイする
 - 3. デプロイした内容を確認する
-
 .. code-block:: bash
 
   $ helm get -h
@@ -586,14 +616,11 @@ Tips1. Helmでパラメータを指定する際の主なデバッグ方法
     notes       download the notes for a named release
     values      download the values file for a named release
 
-
 - 4. 1. や 3. の内容を元に設定ファイルパラメータを記述する
 - 5. 4. で記述した内容が正しく反映されることを3. の手順を参考に確認する
-
 -- ``-f`` で指定することで、ファイルの形式でオプションパラメータを指定することができます
 -- ``--set`` で、パラメータの値を個別に指定することができます
 -- ``--set-file`` で、対象のパラメータに対し、ファイル形式で値を指定することができます
-
 - 6. 意図した動作となっていることを確認する
 
 Tips2. Helmでデプロイするリソースの詳細
@@ -603,7 +630,7 @@ Helmを使ってデプロイしたPrometheusについて、どのようなステ
 
 以下コマンドを実行し、出力結果を確認します
 
-.. code-block:: cmdin
+.. code-block:: bash
   
   helm get all prometheus -n monitor | less
 
@@ -611,100 +638,101 @@ Helmを使ってデプロイしたPrometheusについて、どのようなステ
   :linenos:
   :caption: 実行結果サンプル
 
-NAME: prometheus
-LAST DEPLOYED: Thu Jun 30 08:38:08 2022
-NAMESPACE: monitor
-STATUS: deployed
-REVISION: 1
-TEST SUITE: None
-USER-SUPPLIED VALUES:
-alertmanager:
-  persistentVolume:
-    enabled: false
-extraScrapeConfigs: |+
-  - job_name: 'nginx-mesh-sidecars'
-    kubernetes_sd_configs:
-      - role: pod
-**省略**
+  NAME: prometheus
+  LAST DEPLOYED: Thu Jun 30 08:38:08 2022
+  NAMESPACE: monitor
+  STATUS: deployed
+  REVISION: 1
+  TEST SUITE: None
+  USER-SUPPLIED VALUES:
+  alertmanager:
+    persistentVolume:
+      enabled: false
+  extraScrapeConfigs: |+
+    - job_name: 'nginx-mesh-sidecars'
+      kubernetes_sd_configs:
+        - role: pod
+  **省略**
+  
+  COMPUTED VALUES:
+  alertRelabelConfigs: null
+  alertmanager:
+    affinity: {}
+    baseURL: http://localhost:9093
+    clusterPeers: []
+    configFileName: alertmanager.yml
+    configFromSecret: ""
+    configMapOverrideName: ""
+    containerSecurityContext: {}
+    deploymentAnnotations: {}
+    dnsConfig: {}
+    emptyDir:
+      sizeLimit: ""
+    enabled: true
+    extraArgs: {}
+    extraConfigmapMounts: []
+    extraEnv: {}
+    extraInitContainers: []
+    extraSecretMounts: []
+    image:
+      pullPolicy: IfNotPresent
+      repository: quay.io/prometheus/alertmanager
+      tag: v0.23.0
+    ingress:
+      annotations: {}
+      enabled: false
+      extraLabels: {}
+      extraPaths: []
+      hosts: []
+      path: /
+      pathType: Prefix
+      tls: []
+    name: alertmanager
+    nodeSelector: {}
+    persistentVolume:
+      accessModes:
+      - ReadWriteOnce
+      annotations: {}
+      enabled: false
+      existingClaim: ""
+      mountPath: /data
+      size: 2Gi
+      subPath: ""
+  **省略**
+  extraScrapeConfigs: |+
+    - job_name: 'nginx-mesh-sidecars'
+      kubernetes_sd_configs:
+        - role: pod
+      relabel_configs:
+        - source_labels: [__meta_kubernetes_pod_container_name]
+          action: keep
+          regex: nginx-mesh-sidecar
+        - action: labelmap
+          regex: __meta_kubernetes_pod_label_nsm_nginx_com_(.+)
+        - action: labeldrop
+          regex: __meta_kubernetes_pod_label_nsm_nginx_com_(.+)
+        - action: labelmap
+          regex: __meta_kubernetes_pod_label_(.+)
+        - source_labels: [__meta_kubernetes_namespace]
+          action: replace
+          target_label: namespace
+        - source_labels: [__meta_kubernetes_pod_name]
+          action: replace
+          target_label: pod
+    - job_name: 'nginx-plus-ingress'
+  **省略**
+  HOOKS:
+  MANIFEST:
+  ---
+  # Source: prometheus/charts/kube-state-metrics/templates/serviceaccount.yaml
+  apiVersion: v1
+  kind: ServiceAccount
+  metadata:
+  NOTES:
+  
+  NOTES:
+  The Prometheus server can be accessed via port 80 on the following DNS name from within your cluster:
+  prometheus-server.monitor.svc.cluster.local
 
-COMPUTED VALUES:
-alertRelabelConfigs: null
-alertmanager:
-  affinity: {}
-  baseURL: http://localhost:9093
-  clusterPeers: []
-  configFileName: alertmanager.yml
-  configFromSecret: ""
-  configMapOverrideName: ""
-  containerSecurityContext: {}
-  deploymentAnnotations: {}
-  dnsConfig: {}
-  emptyDir:
-    sizeLimit: ""
-  enabled: true
-  extraArgs: {}
-  extraConfigmapMounts: []
-  extraEnv: {}
-  extraInitContainers: []
-  extraSecretMounts: []
-  image:
-    pullPolicy: IfNotPresent
-    repository: quay.io/prometheus/alertmanager
-    tag: v0.23.0
-  ingress:
-    annotations: {}
-    enabled: false
-    extraLabels: {}
-    extraPaths: []
-    hosts: []
-    path: /
-    pathType: Prefix
-    tls: []
-  name: alertmanager
-  nodeSelector: {}
-  persistentVolume:
-    accessModes:
-    - ReadWriteOnce
-    annotations: {}
-    enabled: false
-    existingClaim: ""
-    mountPath: /data
-    size: 2Gi
-    subPath: ""
-**省略**
-extraScrapeConfigs: |+
-  - job_name: 'nginx-mesh-sidecars'
-    kubernetes_sd_configs:
-      - role: pod
-    relabel_configs:
-      - source_labels: [__meta_kubernetes_pod_container_name]
-        action: keep
-        regex: nginx-mesh-sidecar
-      - action: labelmap
-        regex: __meta_kubernetes_pod_label_nsm_nginx_com_(.+)
-      - action: labeldrop
-        regex: __meta_kubernetes_pod_label_nsm_nginx_com_(.+)
-      - action: labelmap
-        regex: __meta_kubernetes_pod_label_(.+)
-      - source_labels: [__meta_kubernetes_namespace]
-        action: replace
-        target_label: namespace
-      - source_labels: [__meta_kubernetes_pod_name]
-        action: replace
-        target_label: pod
-  - job_name: 'nginx-plus-ingress'
-**省略**
-HOOKS:
-MANIFEST:
----
-# Source: prometheus/charts/kube-state-metrics/templates/serviceaccount.yaml
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-NOTES:
-
-NOTES:
-The Prometheus server can be accessed via port 80 on the following DNS name from within your cluster:
-prometheus-server.monitor.svc.cluster.local
 
 
