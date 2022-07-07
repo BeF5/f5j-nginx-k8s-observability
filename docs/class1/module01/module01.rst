@@ -2,26 +2,24 @@
 #######
 
 実施環境
-========
+====
 
 -  事前にラボ環境へのInviteを行っておりますので、メールをご確認ください
 -  利用するコマンド： git , jq , sudo, curl, make, kubectl(kubenetes環境)
 -  NGINX Trialライセンスの取得、ラボ実施ユーザのHome Directoryへ配置
 
 ラボ環境 (UDF(Unified Demonstration Framework)) コンポーネントへの接続
-======================================================================
+====
 
 | 弊社が提供するLAB環境を使って動作を確認いただきます。
 | ラボ環境を起動する等、一部ブラウザを使って操作します。
-| Google
-  ChromeがSupportブラウザとなります。その他ブラウザでは正しく動作しない場合があることご了承ください。
+| Google ChromeがSupportブラウザとなります。その他ブラウザでは正しく動作しない場合があることご了承ください。
 | 参照：\ `UDF Supported Browsers and
   Clients <https://help.udf.f5.com/en/articles/3470266-supported-browsers-and-clients>`__
 
 
 Windows Jump HostへのRDP接続
 ----------------------------
-
 
 Windows Jump HostからCLIの操作を行う場合、以下タブからRDP Clientファイルをダウンロードいただき接続ください
 
@@ -48,12 +46,30 @@ Clientのショートカットがありますので、そちらをダブルク�
    - .. image:: ./media/putty_menu_kic.jpg
       :width: 200
 
+HELMについて
+====
 
-Linux Hostへの接続 (Jump Host を利用しない場合)
------------------------------------------------
+Helm とは
+- Kubernetes用パッケージマネージャ
+- Helmは、Kubernetes 用に構築されたソフトウェアを検索、共有、使用するための方法です。
+- Kubernetes環境にソフトウェアを簡単にデプロイできます
 
-| ``ubuntu01`` へのSSH接続は、Jump Host経由または、SSH鍵認証を用いて接続可能です。SSH鍵の登録手順は以下を参照ください
-| **SSH鍵を登録頂いていない場合、SSHはグレーアウトします** 
-| 手順： `UDF LAB SSH鍵登録マニュアル <https://github.com/hiropo20/partner_nap_workshop_secure/blob/main/UDF_SSH_Key.pdf>`_
-| (こちらの手順が必要となる場合、本マニュアルを閲覧可に変更します)
+   .. image:: ./media/helm-structure.jpg
+      :width: 400
 
+このラボでは、NGINX Ingress Controller、NGINX Service Mesh、各種監視コンポーネントをHelmを使ってデプロイします
+
+
+デプロイする構成について
+====
+
+このラボでサンプルアプリケーションをデプロイした結果の構成は以下の様になります。
+
+   .. image:: ./media/nginx-observability-structure.jpg
+      :width: 600
+
+- Namespace ``nginx-ingress`` にNIC、 ``nginx-mesh`` にNSMのコンポーネント、 ``monitor`` に監視コンポーネントをデプロイします
+- NSMのSidecarを挿入する対象のNamespaceとして ``prod`` 、 ``staging`` 、 ``legacy`` をデプロイします
+- NSMの管理コンポーネントに接続するために ``nic2`` というNICをデプロイします
+- NSMのSidecarを挿入するアプリケーションに接続するために ``nic1`` というNICをデプロイします
+- GrafanaのDatasouceとして ``Prometheus`` 、 ``Loki`` 、 ``Jaeger`` を指定し、ステータスを確認できるようにします
