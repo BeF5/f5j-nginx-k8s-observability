@@ -370,6 +370,10 @@ HelmでデプロイするLokiの設定を確認します。
       - source_labels: ['__syslog_message_hostname']
         target_label: 'host'
 
+その他Lokiの設定パラメータは以下を参照してください
+- `GitHub helm-charts/charts/loki-stack/ <https://github.com/grafana/helm-charts/tree/main/charts/loki-stack>`__
+- `GitHub helm-charts/charts/loki-stack/values.yaml <https://github.com/grafana/helm-charts/blob/main/charts/loki-stack/values.yaml>`__
+
 Lokiをデプロイします
 
 .. code-block:: cmdin
@@ -434,6 +438,10 @@ Podが正しく作成されていることを確認します
 | 動作確認のため、all-in-one のJaegerをデプロイします。
 | HelmでデプロイするJaegerの設定を確認します。
 
+Jaegerについては以下を参照してください。
+- `JAEGER Getting Started <https://www.jaegertracing.io/docs/next-release/getting-started/>`__
+
+
 .. code-block:: cmdin
 
   cat ~/observability/prep/jaeger-addvalues.yaml
@@ -463,6 +471,12 @@ Podが正しく作成されていることを確認します
     enabled: false
 
 - 6-7行目で ``allInOne`` の形式でデプロイすることを指定し、その他パラメータでふおうな設定を解除します
+
+Jaegerの設定パラメータについては以下のページを参照してください。
+- `GitHub helm-charts/charts/jaeger/ <https://github.com/jaegertracing/helm-charts/tree/main/charts/jaeger>`__
+- `GitHub helm-charts/charts/jaeger/values.yaml <https://github.com/jaegertracing/helm-charts/tree/main/charts/jaeger/values.yaml>`__
+
+
 
 Jaegerをデプロイします
 
