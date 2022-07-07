@@ -7,6 +7,7 @@
 Helmを使って設定されるDefault設定と、NIC、NSMのステータスを取得するために必要となるPrometheusの設定を追加します。
 
 Prometheusについては以下のページを参照してください。
+
 - `Prometheus Overview <https://prometheus.io/docs/introduction/overview/>`__
 
 Prometheusの設定を確認します。
@@ -96,6 +97,7 @@ Prometheusの設定を確認します。
 
 | この設定を ``--set-file extraScrapeConfigs`` のオプションで指定します。
 | ``kubernetes_sd_configs`` で ``Pod`` を指定し、PrometheusがPodのMetricsをScarpeします。詳細は以下のページを参照してください。
+
 - `Prometheus CONFIGURATION kubernetes_sd_configs <https://prometheus.io/docs/prometheus/latest/configuration/configuration/#kubernetes_sd_config>`__
 
 今回はテスト用途でPersistentVolumeを利用しないため、設定を無効にします
@@ -220,6 +222,7 @@ Helmを使って設定されるDefault設定では、Lokiをデプロイする�
 またこのデプロイでは、Lokiの他、Promtail、Grafanaをデプロイします。
 
 Lokiの設定パラメータについては以下のページを参照してください。
+
 - `Promtail Scraping <https://grafana.com/docs/loki/latest/clients/promtail/stages/>`__
 - `Loki LogQL <https://grafana.com/docs/loki/latest/logql/log_queries/>`__
 
@@ -473,10 +476,9 @@ Jaegerについては以下を参照してください。
 - 6-7行目で ``allInOne`` の形式でデプロイすることを指定し、その他パラメータでふおうな設定を解除します
 
 Jaegerの設定パラメータについては以下のページを参照してください。
+
 - `GitHub helm-charts/charts/jaeger/ <https://github.com/jaegertracing/helm-charts/tree/main/charts/jaeger>`__
 - `GitHub helm-charts/charts/jaeger/values.yaml <https://github.com/jaegertracing/helm-charts/tree/main/charts/jaeger/values.yaml>`__
-
-
 
 Jaegerをデプロイします
 
@@ -543,6 +545,7 @@ Podが正しく作成されていることを確認します
 ====
 
 踏み台サーバのデスクトップのショートカットから ``Chrome`` を実行し、以下のURLにアクセスします
+
 - `http://grafana.example.com:8080/ <http://grafana.example.com:8080/>`__
 
 ログイン画面が表示されます。
@@ -609,6 +612,7 @@ Tips1. Helmでパラメータを指定する際の主なデバッグ方法
 | パラメータを指定した場合には以下のような手順に沿って、調査することが有効です
 
 - 1. ドキュメントを参照する。取得するHelm Chartや、Chartが参照するGitHubの内容を確認します
+
   - `Prometheus helm-charts <https://prometheus-community.github.io/helm-charts/>`__
   - `GitHub helm-charts/prometheus <https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus>`__
   - `GitHub helm-charts/prometheus values.yaml <https://github.com/prometheus-community/helm-charts/blob/main/charts/prometheus/values.yaml>`__
@@ -616,7 +620,7 @@ Tips1. Helmでパラメータを指定する際の主なデバッグ方法
 - 2. デフォルトの設定でデプロイする
 - 3. デプロイした内容を確認する。helm get コマンドを用いて状態を確認できます
 
-.. code-block:: bash
+.. code-block:: cmdin
 
   $ helm get -h
   
@@ -640,9 +644,11 @@ Tips1. Helmでパラメータを指定する際の主なデバッグ方法
 
 - 4. 1. や 3. の内容を元に設定ファイルパラメータを記述する
 - 5. 4. で記述した内容が正しく反映されることを3. の手順を参考に確認する
+
   - ``-f`` で指定することで、ファイルの形式でオプションパラメータを指定することができます
   - ``--set`` で、パラメータの値を個別に指定することができます
   - ``--set-file`` で、対象のパラメータに対し、ファイル形式で値を指定することができます
+
 - 6. 意図した動作となっていることを確認する
 
 Tips2. Helmでデプロイするリソースの詳細
@@ -652,7 +658,7 @@ Helmを使ってデプロイしたPrometheusについて、どのようなステ
 
 以下コマンドを実行し、出力結果を確認します
 
-.. code-block:: bash
+.. code-block:: cmdin
   
   helm get all prometheus -n monitor | less
 
