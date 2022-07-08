@@ -205,8 +205,11 @@ Log browser 右側にLogQLで記述した条件を入力し、 ``Ctrl + Enter`` 
 出力例1: logtype securitylog のログで、Bot機能で curl と判定されたものを抽出
 ^^^^
 
- .. image:: ./media/grafana-explore-logql1.jpg
-    :width: 600
+.. code-block:: cmdin
+  :caption: Log Query文字列
+  
+  {namespace="nginx-ingress"} | json | logtype="securitylog" | bot_signature_name="curl"
+
 
 +------------------------------+------------------------------------------------------+
 |{namespace="nginx-ingress"}   | 対象のログを示すラベルの指定                         |
@@ -225,8 +228,13 @@ Log browser 右側にLogQLで記述した条件を入力し、 ``Ctrl + Enter`` 
 出力例2: logtype accessylog のログで、grafana.example.com 宛の接続を抽出
 ^^^^
 
- .. image:: ./media/grafana-explore-logql2.jpg
-    :width: 600
+
+.. code-block:: cmdin
+  :caption: Log Query文字列
+  
+  {namespace="nginx-ingress"} | json | logtype="accesslog" | server_name="grafana.example.com"
+
+
 
 +--------------------------------------+--------------------------------------------------------------+
 |{namespace="nginx-ingress"}           | 対象のログを示すラベルの指定                                 |
@@ -244,8 +252,13 @@ Log browser 右側にLogQLで記述した条件を入力し、 ``Ctrl + Enter`` 
 出力例3: logtype accessylog のログで、5分毎の集計結果を、server_name 毎に集計して表示
 ^^^^
 
- .. image:: ./media/grafana-explore-logql3.jpg
-    :width: 400
+.. code-block:: cmdin
+  :caption: Log Query文字列
+  
+  sum by (server_name) (count_over_time(
+  {namespace="nginx-ingress"} | json | logtype="accesslog" 
+  [5m]))
+
 
 +--------------------------------------+--------------------------------------------------------------+
 |sum by (server_name)(                 | 抽出した条件の結果を合計し、指定のパラメータごとに表示       |
@@ -268,20 +281,18 @@ Loki Promtail 設定
 ----
 
 Lokiで利用するPromtailの設定について紹介します。
-各種ログを取得する際に、取得したログに対し適切な処理を行うことで、Lokiでのログの閲覧がより容易になります。
 
-Promtailに利用される設定ファイルの内容を確認します。
+ログデータに対し適切な処理を行うことで、Lokiでのログの閲覧がより容易になります。
 
-Helm Chartの `values.yaml の config <https://github.com/grafana/helm-charts/blob/main/charts/promtail/values.yaml#L237>`__ に指定された情報が、
+Helm Chartの `values.yaml config <https://github.com/grafana/helm-charts/blob/main/charts/promtail/values.yaml#L237>`__ に指定された情報が、
 Template の `secret.yaml <https://github.com/grafana/helm-charts/blob/main/charts/promtail/templates/secret.yaml>`__ に読み込まれ、
-promtail の設定として動作します
+Promtail の設定として反映されます。
 
-実際に設定されているファイルの内容を参考に確認します。
-設定の詳細については、以下のドキュメントを参照して下さい。
+記述内容の詳細については、以下のドキュメントを参照して下さい。
 
 - `Grafana Configuring Promtail <https://grafana.com/docs/loki/latest/clients/promtail/configuration/>`__
 
-設定ファイル全体の構成は以下のとおりです。
+ラボの設定ファイルを元に開設します。設定ファイル全体の構成は以下のとおりです。
 
  .. image:: ./media/promtail-config.jpg
     :width: 400
@@ -295,7 +306,7 @@ promtail の設定として動作します
 それぞれ、 ``loki-scrape-addvalue.yaml`` 、 ``loki-scrape.yaml`` で指定した内容が設定ファイルに反映されています。
 
 Syslogサーバの参考設定を示す ``job_name: syslog`` はSyslogで受けたLogデータを処理する設定となります。
-各Podのログの取得は ``job_name kubernetes-pods`` に記述しています。
+各Podのログの取得は ``job_name: kubernetes-pods`` に記述しています。
 
 ``scrape_configs`` では大きく分けて以下の設定を記述します
 
@@ -318,9 +329,7 @@ Syslogサーバの参考設定を示す ``job_name: syslog`` はSyslogで受け�
   - Pipeline の詳細は `Grafana Promtail <https://grafana.com/docs/loki/latest/clients/promtail/pipelines/>`__ を参照してください
   - Stage の詳細、及び関数の詳細は `Grafana Promtail Stages <https://grafana.com/docs/loki/latest/clients/promtail/stages/>`__ を参照してください
 
-``Pipeline`` では比較的自由な記述が可能です。
-
-Scrapeされ、Relabelされたログデータに対し、ある条件のログをRegexでラベルとデータのフィルタ、特定文字列の置換 などの処理が可能です
+``Pipeline`` ではログデータに関する処理を記述します。
 Stageは ``Parsing`` 、 ``Transoform`` 、 ``Action`` 、 ``Filtering`` の4種類に分類されており、以下のような内容となります。
 
 - Parsing stages: データの構造を指定の内容でパースします
@@ -341,9 +350,8 @@ Stageは ``Parsing`` 、 ``Transoform`` 、 ``Action`` 、 ``Filtering`` の4種
 
   - match: 指定した条件に該当するログに対してstageを実行します 
 
-この4種は主な役割を定義するものであり、最終的には意図した関数を組み合わせ対象のログを抽出することが目的となります。
-
-ラボの設定では以下のような意図の設定を記述しています。
+| これらを組み合わせ意図した形式のログデータをLokiで扱えるようにします。
+| ラボの設定では以下のような意図の設定を記述しています。
 
  .. image:: ./media/promtail-config-scrape_configs2.jpg
     :width: 400
@@ -353,9 +361,12 @@ Stageは ``Parsing`` 、 ``Transoform`` 、 ``Action`` 、 ``Filtering`` の4種
  .. image:: ./media/promtail-config-scrape_configs3.jpg
     :width: 400
 
-これらの処理を行うことで以下の処理を行います
+これらの処理によりLokiでのデータの扱いが以下の様に容易になります
+
 - NICのAccess Log(logtype accesslog)、NAP WAFのLog(logtype accesslog)をjsonで容易に扱える様に変更
 - NAP WAFのLogでJSONパースでエラーとなる文字列の置換、及び該当データがない場合の文字列をAccess Logと統一
+
+LogQLは柔軟な記述が可能となりますので、ダッシュボードの記述内容も合わせてご確認ください
 
 Tips2. ラボが正しく動作しない場合
 ====
