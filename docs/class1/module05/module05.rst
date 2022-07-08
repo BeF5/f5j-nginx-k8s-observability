@@ -1,4 +1,4 @@
-ステータスの確認
+監視コンポーネントのダッシュボードのデプロイ・モニタリング
 ####
 
 1. Dashboardのデプロイ
@@ -361,7 +361,7 @@ Stageは ``Parsing`` 、 ``Transoform`` 、 ``Action`` 、 ``Filtering`` の4種
  .. image:: ./media/promtail-config-scrape_configs3.jpg
     :width: 400
 
-これらの処理によりLokiでのデータの扱いが以下の様に容易になります
+これらの処理により、以下のようにLokiでの操作が簡単になります
 
 - NICのAccess Log(logtype accesslog)、NAP WAFのLog(logtype accesslog)をjsonで容易に扱える様に変更
 - NAP WAFのLogでJSONパースでエラーとなる文字列の置換、及び該当データがない場合の文字列をAccess Logと統一
