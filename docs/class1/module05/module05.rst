@@ -261,12 +261,62 @@ Log browser 右側にLogQLで記述した条件を入力し、 ``Ctrl + Enter`` 
 |[5m]))                                | ``count_over_time`` の期間を指定 (5m=5分)                    |
 +--------------------------------------+--------------------------------------------------------------+
 
-
  .. image:: ./media/grafana-explore-logql3-graph.jpg
     :width: 400
 
 Loki Promtail 設定
 ----
+
+Lokiで利用するPromtailの設定について紹介します。
+各種ログを取得する際に、取得したログに対し適切な処理を行うことで、Lokiでのログの閲覧がより容易になります。
+
+Promtailに利用される設定ファイルの内容を確認します。
+
+Helm Chartの `values.yaml の config <https://github.com/grafana/helm-charts/blob/main/charts/promtail/values.yaml#L237>`__ に指定された情報が、
+Template の `secret.yaml <https://github.com/grafana/helm-charts/blob/main/charts/promtail/templates/secret.yaml>`__ に読み込まれ、
+promtail の設定として動作します
+
+実際に設定されているファイルの内容を参考に確認します。
+設定の詳細については、以下のドキュメントを参照して下さい。
+
+- `Grafana Configuring Promtail <https://grafana.com/docs/loki/latest/clients/promtail/configuration/>`__
+
+設定ファイル全体の構成は以下のとおりです。
+
+ .. image:: ./media/promtail-config.jpg
+    :width: 400
+
+この設定項目の中で ``scrape_configs`` がLogデータの取得、及び整形・データの抽出を記述する箇所となります。
+``scrape_configs`` を確認します
+
+ .. image:: ./media/promtail-config-scrape_configs.jpg
+    :width: 400
+
+それぞれ、 ``loki-scrape-addvalue.yaml`` 、 ``loki-scrape.yaml`` で指定した内容が設定ファイルに反映されています。
+
+Syslogサーバの参考設定を示す ``job_name: syslog`` はSyslogで受けたLogデータを処理する設定となります。
+各Podのログの取得は ``job_name kubernetes-pods`` に記述しています。
+
+``scrape_configs`` では大きく分けて以下の設定を記述します
+
+- Scraping (Service Discovery)：
+
+  - ログデータを取得します。
+  - Scrapeの処理は ``Kubernetes`` 、 ``Windows Event`` 、 ``Journal(Linux)`` 、 ``syslog`` などがあります
+  - Scrapeの内容に応じた情報を持つラベルがあり、それらを元にログの分類やタグ付けが可能です。その処理を ``Relabel`` で記述します
+  - 詳細は、設定ファイルの記述方法や `Grafana Configuring Promtail <https://grafana.com/docs/loki/latest/clients/promtail/configuration/>`__ 、 `Grafana Promtail Scraping <https://grafana.com/docs/loki/latest/clients/promtail/scraping/>`__ を確認してください
+
+- Relabel : 
+
+  - ログデータを条件に従ってラベルの付与（付け替え など）を行います
+  - Scrapeに応じたラベルが利用可能です。ラベルは予め予約された文字列が利用され、 ``アンダースコア2つ (__)`` から始まる文字列で指定されます
+  - 詳細は、設定ファイルの記述方法や `Grafana Configuring Promtail <https://grafana.com/docs/loki/latest/clients/promtail/configuration/>`__ 、 `Grafana Promtail Scraping <https://grafana.com/docs/loki/latest/clients/promtail/scraping/>`__ を確認してください
+
+- Pipeline : 
+
+  - ログデータを各種情報に合わせて、検索、整形、変更、ラベルなどを行います。Pipelineの処理はStageという構成で呼ばれ、記述に合わせた処理を行います
+  - Pipeline の詳細は `Grafana Promtail <https://grafana.com/docs/loki/latest/clients/promtail/pipelines/>`__ を参照してください
+  - Stage の詳細、及び関数の詳細は `Grafana Promtail Stages <https://grafana.com/docs/loki/latest/clients/promtail/stages/>`__ を参照してください
 
 
 Tips2. ラボが正しく動作しない場合
@@ -276,35 +326,40 @@ Tips2. ラボが正しく動作しない場合
 
   - helm でデプロイしたリソースの削除
 
-.. code-block:: cmdin
+  .. code-block:: cmdin
+    
+    helm uninstall <resouce name>  <-n namespace>
   
-  helm uninstall <resouce name>  <-n namespace>
 
   - kubectl でデプロイしたリソースの削除
 
-.. code-block:: cmdin
-  
-  kubectl delete <resource type> <resouce name> <-n namespace>
-  kubectl delete -f <yaml file> <-n namespace>
+  .. code-block:: cmdin
+    
+    kubectl delete <resource type> <resouce name> <-n namespace>
+    kubectl delete -f <yaml file> <-n namespace>
+
 
 - 各リソースへの疎通を確認する
 
   - デモアプリケーションへの疎通を確認する
 
-.. code-block:: cmdin
-  
-  curl -v -H "Host: bookinfo.example.com" "http://127.0.0.1/productpage"  | grep "<title>"
+  .. code-block:: cmdin
+    
+    curl -v -H "Host: bookinfo.example.com" "http://127.0.0.1/productpage"  | grep "<title>"
+
 
   - 各監視ツールへの疎通を確認する
 
-.. code-block:: cmdin
-  
-  curl -v -H "Host: grafana.example.com" "http://127.0.0.1:8080/login" | grep "<title>"
-  curl -v -H "Host: prometheus.example.com" "http://127.0.0.1:8080/graph" | grep "<title>"
-  curl -v -H "Host: jaeger.example.com" "http://127.0.0.1:8080/" | grep "<title>"
+  .. code-block:: cmdin
+    
+    curl -v -H "Host: grafana.example.com" "http://127.0.0.1:8080/login" | grep "<title>"
+    curl -v -H "Host: prometheus.example.com" "http://127.0.0.1:8080/graph" | grep "<title>"
+    curl -v -H "Host: jaeger.example.com" "http://127.0.0.1:8080/" | grep "<title>"
+
 
   - WAFでブロックされることを確認する
 
-.. code-block:: cmdin
+  .. code-block:: cmdin
+    
+    curl -v -H "Host: bookinfo.example.com" "http://127.0.0.1/productpage?a=<script>" 
   
-  curl -v -H "Host: bookinfo.example.com" "http://127.0.0.1/productpage?a=<script>" 
