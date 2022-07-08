@@ -318,6 +318,44 @@ Syslogサーバの参考設定を示す ``job_name: syslog`` はSyslogで受け�
   - Pipeline の詳細は `Grafana Promtail <https://grafana.com/docs/loki/latest/clients/promtail/pipelines/>`__ を参照してください
   - Stage の詳細、及び関数の詳細は `Grafana Promtail Stages <https://grafana.com/docs/loki/latest/clients/promtail/stages/>`__ を参照してください
 
+``Pipeline`` では比較的自由な記述が可能です。
+
+Scrapeされ、Relabelされたログデータに対し、ある条件のログをRegexでラベルとデータのフィルタ、特定文字列の置換 などの処理が可能です
+Stageは ``Parsing`` 、 ``Transoform`` 、 ``Action`` 、 ``Filtering`` の4種類に分類されており、以下のような内容となります。
+
+- Parsing stages: データの構造を指定の内容でパースします
+
+  - docker: ログデータをDocker Formatでパースします
+  - cri: ログデータをCRI Formatでパースします
+  - json: ログデータをJson Formatでパースします
+
+- Transform stages: ログラインの構成を変更・変形します
+
+  - template: GoのTemplateを使って、データを処理します
+  
+- Action stages: ログに関連するデータをしていします
+
+  - timestamp: ログエントリの時刻情報を指定します
+
+- Filtering stages: 対象とするログの選択や、ログの転送に関する設定をします
+
+  - match: 指定した条件に該当するログに対してstageを実行します 
+
+この4種は主な役割を定義するものであり、最終的には意図した関数を組み合わせ対象のログを抽出することが目的となります。
+
+ラボの設定では以下のような意図の設定を記述しています。
+
+ .. image:: ./media/promtail-config-scrape_configs2.jpg
+    :width: 400
+
+各Stage、関数の記述イメージは以下です。
+
+ .. image:: ./media/promtail-config-scrape_configs3.jpg
+    :width: 400
+
+これらの処理を行うことで以下の処理を行います
+- NICのAccess Log(logtype accesslog)、NAP WAFのLog(logtype accesslog)をjsonで容易に扱える様に変更
+- NAP WAFのLogでJSONパースでエラーとなる文字列の置換、及び該当データがない場合の文字列をAccess Logと統一
 
 Tips2. ラボが正しく動作しない場合
 ====
