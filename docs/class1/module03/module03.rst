@@ -14,8 +14,7 @@ Prometheusの設定を確認します。
 
 .. code-block:: cmdin
 
-  ## cd ~/f5j-nginx-observability-lab/prep/helm/
-  cat prometheus-nginx-mesh-and-ingress-scrape-config.yaml
+  cat ~/f5j-nginx-observability-lab/prep/helm/prometheus-nginx-mesh-and-ingress-scrape-config.yaml
 
 .. code-block:: bash
   :linenos:
@@ -104,8 +103,7 @@ Prometheusの設定を確認します。
 
 .. code-block:: cmdin
 
-  ## cd ~/f5j-nginx-observability-lab/prep/helm/
-  cat prometheus-addvalue.yaml
+  cat ~/f5j-nginx-observability-lab/prep/helm/prometheus-addvalue.yaml
 
 .. code-block:: bash
   :linenos:
@@ -123,7 +121,7 @@ Prometheusをデプロイします
 
 .. code-block:: cmdin
 
-  ## cd ~/f5j-nginx-observability-lab/prep/helm/
+  cd ~/f5j-nginx-observability-lab/prep/helm/
   helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
   helm upgrade --install prometheus prometheus-community/prometheus \
   -f prometheus-addvalue.yaml \
@@ -232,8 +230,7 @@ HelmでデプロイするLokiの設定を確認します。
 
 .. code-block:: cmdin
 
-  ## cd ~/f5j-nginx-observability-lab/prep/helm/
-  cat loki-scrape.yaml
+  cat ~/f5j-nginx-observability-lab/prep/helm/loki-scrape.yaml
 
 .. code-block:: bash
   :linenos:
@@ -360,8 +357,7 @@ HelmでデプロイするLokiの設定を確認します。
 
 .. code-block:: cmdin
 
-  ## cd ~/f5j-nginx-observability-lab/prep/helm/
-  cat loki-scrape-addvalue.yaml
+  cat ~/f5j-nginx-observability-lab/prep/helm/loki-scrape-addvalue.yaml
 
 .. code-block:: bash
   :linenos:
@@ -454,8 +450,7 @@ Jaegerについては以下を参照してください。
 
 .. code-block:: cmdin
 
-  ## cd ~/f5j-nginx-observability-lab/prep/helm/
-  cat jaeger-addvalues.yaml
+  cat ~/f5j-nginx-observability-lab/prep/helm/jaeger-addvalues.yaml
 
 .. code-block:: bash
   :linenos:

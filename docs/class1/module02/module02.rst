@@ -94,8 +94,7 @@ HELMをinstallします。
 
 .. code-block:: cmdin
 
-  ## cd ~/f5j-nginx-observability-lab/prep/helm/
-  cat nsm-values.yaml
+  cat ~/f5j-nginx-observability-lab/prep/helm/nsm-values.yaml
 
 .. code-block:: bash
   :linenos:
@@ -329,8 +328,7 @@ NICをデプロイします。
 
 .. code-block:: cmdin
 
-  ## cd ~/f5j-nginx-observability-lab/prep/helm/
-  cat nic1-addvalue.yaml
+  cat ~/f5j-nginx-observability-lab/prep/helm/nic1-addvalue.yaml
 
 .. code-block:: bash
   :linenos:
@@ -416,8 +414,7 @@ nic1 との差分を中心に確認します
 
 .. code-block:: cmdin
 
-  ## cd ~/f5j-nginx-observability-lab/prep/helm/
-  cat nic2-addvalue.yaml
+  cat ~/f5j-nginx-observability-lab/prep/helm/nic2-addvalue.yaml
 
 .. code-block:: bash
   :linenos:
@@ -554,8 +551,7 @@ NodePortの情報を確認します。
 
 .. code-block:: cmdin
   
-  ## cd ~/f5j-nsm-lab/prep/
-  vi nginx.conf
+  vi ~/f5j-nsm-lab/prep/nginx.conf
 
 以下の内容を参考に、先程確認したNodePortで割り当てられたポート番号宛に通信を転送するように、NGINXを設定します。
 
@@ -594,8 +590,7 @@ NodePortの情報を確認します。
 
 .. code-block:: cmdin
   
-  ## cd ~/f5j-nsm-lab/prep/
   sudo cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf-
-  sudo cp nginx.conf /etc/nginx/nginx.conf
+  sudo cp ~/f5j-nsm-lab/prep/nginx.conf /etc/nginx/nginx.conf
   sudo nginx -s reload
 

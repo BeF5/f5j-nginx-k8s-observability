@@ -20,9 +20,9 @@
   kubectl apply -f nic2-custom_log_format.yaml
   
   # for access bookinfo application with NAP WAF / custom log format
-  kubectl apply -f simple-ap.yaml
-  kubectl apply -f ap-logconf.yaml
-  kubectl apply -f waf.yaml
+  kubectl apply -f simple-ap.yaml -n staging
+  kubectl apply -f ap-logconf.yaml -n staging
+  kubectl apply -f waf.yaml -n staging
   kubectl apply -f staging-bookinfo-nap-vs.yaml
 
 デプロイした結果を確認します
@@ -40,6 +40,24 @@
   monitor     jaeger-vs         Valid   jaeger.example.com                   32s
   monitor     prometheus-vs     Valid   prometheus.example.com               40s
   staging     bookinfo-vs       Valid   bookinfo.example.com                 96s
+
+.. code-block:: cmdin
+
+  kubectl get aplogconf,appolicy,policy -n staging
+
+.. code-block:: bash
+  :linenos:
+  :caption: 実行結果サンプル
+
+  NAME                                  AGE
+  aplogconf.appprotect.f5.com/logconf   83s
+  
+  NAME                                   AGE
+  appolicy.appprotect.f5.com/simple-ap   87s
+  
+  NAME                              STATE   AGE
+  policy.k8s.nginx.org/waf-policy   Valid   80s
+
 
 踏み台ホストのブラウザ(Chrome)よりそれぞれのサービスのURLへアクセスいただくことにより、画面をご覧頂くことが可能です。
 

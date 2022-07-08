@@ -82,6 +82,12 @@ Jsonの読み込みに成功すると、以下の画面が表示されるので 
 3. ステータスの確認
 ====
 
+.. NOTE::
+   ダッシュボードに結果が反映するまで時間がかかる場合があります
+   正しく読み込まれない場合などは、対象のダッシュボードを再度開き、状態を確認してください
+
+  
+
 1. NIC Dashboard
 ----
 
@@ -138,3 +144,136 @@ Jsonの読み込みに成功すると、以下の画面が表示されるので 
 
  .. image:: ./media/grafana-explore-jaeger3.jpg
     :width: 400
+
+Tips1. 各種ステータスの確認
+
+Grafana の Explore より、各データソースの詳細を確認することが可能です
+
+ .. image:: ./media/grafana-explore.jpg
+    :width: 400
+
+Prometheus ステータスの確認
+----
+
+Metric Browser をクリックし、Prometheusが取得したMetricsを確認できます
+
+ .. image:: ./media/grafana-explore-prometheus.jpg
+    :width: 400
+
+ .. image:: ./media/grafana-explore-prometheus2.jpg
+    :width: 400
+
+PrometheusはPromQLという書式で様々にMetricsを操作し、情報を出力することが可能です。
+PromQLについては以下のドキュメントを参照してください。
+
+- `Prometheus Querying Functions <https://prometheus.io/docs/prometheus/latest/querying/functions/>`__
+- `Prometheus Querying Examples <https://prometheus.io/docs/prometheus/latest/querying/examples/>`__
+
+ .. image:: ./media/grafana-explore-prometheus-promql.jpg
+    :width: 400
+
+ .. image:: ./media/grafana-explore-prometheus-promql2.jpg
+    :width: 400
+
+Loki ステータスの確認
+----
+
+ .. image:: ./media/grafana-explore-loki.jpg
+    :width: 400
+
+ .. image:: ./media/grafana-explore-loki2.jpg
+    :width: 400
+
+ .. image:: ./media/grafana-explore-loki3.jpg
+    :width: 400
+
+ .. image:: ./media/grafana-explore-loki4.jpg
+    :width: 400
+
+LokiはLogQLという書式で様々にMetricsを操作し、情報を出力することが可能です。
+LogQLについては以下のドキュメントを参照してください。
+
+- `Grafana Log queries <https://grafana.com/docs/loki/latest/logql/log_queries/>`__
+
+ .. image:: ./media/loki-logql.jpg
+    :width: 400
+
+Log browser 右側にLogQLで記述した条件を入力し、 ``Ctrl + Enter`` または 画面右上の ``Run query`` をクリックすると結果が表示されます
+
+ .. image:: ./media/grafana-explore-logql1.jpg
+    :width: 400
+
++-----------------------------+------------------------------------------------------+
+|{namespace="nginx-ingress"}  | 対象のログを示すラベルの指定                         |
++-----------------------------+------------------------------------------------------+
+|\| json                      | ``json`` 形式でログデータをパース                    |
++-----------------------------+------------------------------------------------------+
+|\| logtype="securitylog"     | ``logtype`` が ``securitylog`` でフィルタ            |
++-----------------------------+------------------------------------------------------+
+|\| bot_signature_name="curl" | ``bot_signature_name`` が ``curl`` でフィルタ        |
++-----------------------------+------------------------------------------------------+
+
+ .. image:: ./media/grafana-explore-logql1-graph.jpg
+    :width: 400
+
+
+ .. image:: ./media/grafana-explore-logql2.jpg
+    :width: 400
+
++-------------------------------------+--------------------------------------------------------------+
+|{namespace="nginx-ingress"}          | 対象のログを示すラベルの指定                                 |
++-------------------------------------+--------------------------------------------------------------+
+|\| json                              | ``json`` 形式でログデータをパース                            |
++-------------------------------------+--------------------------------------------------------------+
+|\| logtype="accesslog"               | ``logtype`` が ``accesslog`` でフィルタ                      |
++-------------------------------------+--------------------------------------------------------------+
+|\| server_name="grafana.example.com" | ``server_name`` が ``grafana.example.com`` でフィルタ        |
++-------------------------------------+--------------------------------------------------------------+
+
+ .. image:: ./media/grafana-explore-logql2-graph.jpg
+    :width: 400
+
+ .. image:: ./media/grafana-explore-logql3.jpg
+    :width: 400
+
++-----------------------------+------------------------------------------------------+
+|{namespace="nginx-ingress"}  | 対象のログを示すラベルの指定                         |
++-----------------------------+------------------------------------------------------+
+|\| json                      | ``json`` 形式でログデータをパース                    |
++-----------------------------+------------------------------------------------------+
+|\| logtype="securitylog"     | ``logtype`` が ``securitylog`` でフィルタ            |
++-----------------------------+------------------------------------------------------+
+|\| bot_signature_name="curl" | ``bot_signature_name`` が ``curl`` でフィルタ        |
++-----------------------------+------------------------------------------------------+
+
+ .. image:: ./media/grafana-explore-logql3-graph.jpg
+    :width: 400
+
+Loki Promtail 設定
+----
+
+
+Tips2. ラボが正しく動作しない場合
+====
+
+- 対象のリソースを削除し、再度作成する
+
+  - helm でデプロイしたリソースの削除
+helm uninstall <resouce name>  <-n namespace>
+
+  - kubectl でデプロイしたリソースの削除
+kubectl delete <resource type> <resouce name> <-n namespace>
+kubectl delete -f <yaml file> <-n namespace>
+
+- 各リソースへの疎通を確認する
+
+  - デモアプリケーションへの疎通を確認する
+curl -v -H "Host: bookinfo.example.com" "http://127.0.0.1/productpage"  | grep "<title>"
+
+  - 各監視ツールへの疎通を確認する
+curl -v -H "Host: grafana.example.com" "http://127.0.0.1:8080/login" | grep "<title>"
+curl -v -H "Host: prometheus.example.com" "http://127.0.0.1:8080/graph" | grep "<title>"
+curl -v -H "Host: jaeger.example.com" "http://127.0.0.1:8080/" | grep "<title>"
+
+  - WAFでブロックされることを確認する
+curl -v -H "Host: bookinfo.example.com" "http://127.0.0.1/productpage?a=<script>" 
