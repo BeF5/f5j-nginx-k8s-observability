@@ -34,24 +34,6 @@
   monitor     loki-grafana-vs   Valid   grafana.example.com                  26s
   monitor     jaeger-vs         Valid   jaeger.example.com                   32s
   monitor     prometheus-vs     Valid   prometheus.example.com               40s
-  staging     bookinfo-vs       Valid   bookinfo.example.com                 96s
-
-.. code-block:: cmdin
-
-  kubectl get aplogconf,appolicy,policy -n staging
-
-.. code-block:: bash
-  :linenos:
-  :caption: 実行結果サンプル
-
-  NAME                                  AGE
-  aplogconf.appprotect.f5.com/logconf   83s
-  
-  NAME                                   AGE
-  appolicy.appprotect.f5.com/simple-ap   87s
-  
-  NAME                              STATE   AGE
-  policy.k8s.nginx.org/waf-policy   Valid   80s
 
 
 踏み台ホストのブラウザ(Chrome)よりそれぞれのサービスのURLへアクセスいただくことにより、画面をご覧頂くことが可能です。
@@ -149,6 +131,37 @@ Lokiはデプロイ時点で設定されています。以下のような結果�
   kubectl apply -f ap-logconf.yaml -n staging
   kubectl apply -f waf.yaml -n staging
   kubectl apply -f staging-bookinfo-nap-vs.yaml
+
+.. code-block:: cmdin
+
+  kubectl get vs -A
+
+.. code-block:: bash
+  :linenos:
+  :caption: 実行結果サンプル
+
+  NAMESPACE   NAME              STATE   HOST                   IP    PORTS   AGE
+  monitor     loki-grafana-vs   Valid   grafana.example.com                  26s
+  monitor     jaeger-vs         Valid   jaeger.example.com                   32s
+  monitor     prometheus-vs     Valid   prometheus.example.com               40s
+  staging     bookinfo-vs       Valid   bookinfo.example.com                 96s
+  
+.. code-block:: cmdin
+
+  kubectl get aplogconf,appolicy,policy -n staging
+
+.. code-block:: bash
+  :linenos:
+  :caption: 実行結果サンプル
+
+  NAME                                  AGE
+  aplogconf.appprotect.f5.com/logconf   83s
+  
+  NAME                                   AGE
+  appolicy.appprotect.f5.com/simple-ap   87s
+  
+  NAME                              STATE   AGE
+  policy.k8s.nginx.org/waf-policy   Valid   80s
 
 NSM Labで利用した bookinfo のアプリケーションをデプロイします。
 詳細は `NSM サンプルアプリケーションのデプロイ <https://f5j-nginx-service-mesh.readthedocs.io/en/latest/class1/module03/module03.html#id1>`__ を参照してください
