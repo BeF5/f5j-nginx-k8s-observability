@@ -1,7 +1,7 @@
-NGINX Service Mesh Lab Guide for BeF5 Git Repository
+NGINX K8S Observability Lab Guide for BeF5 Git Repository
 ==================
 
-これは、NGINX Service Mesh ラボのレポジトリです
+これは、NGINX K8S Observability ラボのレポジトリです
 
 Support
 -------

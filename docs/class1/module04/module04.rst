@@ -18,12 +18,7 @@
   # for changing NIC custom log format
   kubectl apply -f nic1-custom_log_format.yaml
   kubectl apply -f nic2-custom_log_format.yaml
-  
-  # for access bookinfo application with NAP WAF / custom log format
-  kubectl apply -f simple-ap.yaml -n staging
-  kubectl apply -f ap-logconf.yaml -n staging
-  kubectl apply -f waf.yaml -n staging
-  kubectl apply -f staging-bookinfo-nap-vs.yaml
+
 
 デプロイした結果を確認します
 
@@ -144,6 +139,16 @@ Lokiはデプロイ時点で設定されています。以下のような結果�
 
 3. サンプルアプリケーションのデプロイ
 ====
+
+サンプルアプリケーションに必要となる、NGINX Ingress Controllerを設定します。
+
+.. code-block:: cmdin
+  
+  # for access bookinfo application with NAP WAF / custom log format
+  kubectl apply -f simple-ap.yaml -n staging
+  kubectl apply -f ap-logconf.yaml -n staging
+  kubectl apply -f waf.yaml -n staging
+  kubectl apply -f staging-bookinfo-nap-vs.yaml
 
 NSM Labで利用した bookinfo のアプリケーションをデプロイします。
 詳細は `NSM サンプルアプリケーションのデプロイ <https://f5j-nginx-service-mesh.readthedocs.io/en/latest/class1/module03/module03.html#id1>`__ を参照してください

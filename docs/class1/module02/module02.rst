@@ -56,7 +56,7 @@ HELMをinstallします。
 .. code-block:: cmdin
   
   cd ~/
-  git clone https://github.com/BeF5/f5j-nginx-observability-lab.git
+  git clone https://github.com/BeF5/f5j-nginx-observability-lab.git --branch v1.1.0
 
 2. NSMのセットアップ
 ====
@@ -100,19 +100,24 @@ HELMをinstallします。
 .. code-block:: bash
   :linenos:
   :caption: 実行結果サンプル
-  :emphasize-lines: 11,20,24,28,32,40,44,48,51,76
+  :emphasize-lines: 25,29,33,37,45,49,52
 
+  # NGINX Service Mesh image registry settings.
+  registry:
+    # Hostname:port (if needed) for registry and path to images.
+    # Affects: nginx-mesh-api, nginx-mesh-cert-reloader, nginx-mesh-init, nginx-mesh-metrics, nginx-mesh-sidecar
+    server: "docker-registry.nginx.com/nsm"
+  
+    # Tag used for pulling images from registry
+    # Affects: nginx-mesh-api, nginx-mesh-cert-reloader, nginx-mesh-init, nginx-mesh-metrics, nginx-mesh-sidecar
+    imageTag: "1.6.0"
+  
   # Environment to deploy the mesh into.
   # Valid values: kubernetes, openshift
   environment: "kubernetes"
   
   # Enable UDP traffic proxying (beta). Linux kernel 4.18 or greater is required.
   enableUDP: false
-  
-  # Deploy Grafana as a part of the NGINX Service Mesh.
-  # Note: This configurable will be removed in version 1.5
-  # Valid values: true, false
-  deployGrafana: false
   
   # NGINX log format.
   # Valid values: default, json
@@ -127,22 +132,18 @@ HELMをinstallします。
   # Address should be in the format <service-name>.<namespace>:<service-port>.
   prometheusAddress: "prometheus-server.monitor:80"
   
-  # NGINX Service Mesh auto-injection settings.
-  autoInjection:
-    disable: true
+  # Globally disable automatic sidecar injection upon resource creation.
+  # Use either "enabledNamespaces" or a namespace label to enable automatic injection.
+  disableAutoInjection: true
   
-    # Enable automatic sidecar injection for specific namespaces.
-    # Must be used with "disable".
-    enabledNamespaces: [ staging , prod ]
+  # Enable automatic sidecar injection for specific namespaces.
+  # Must be used with "disableAutoInjection".
+  enabledNamespaces: [ staging , prod ]
   
-  # NGINX Service Mesh tracing settings.
+  # NGINX Service Mesh tracing settings. Deprecated in favor of telemetry.
   # Cannot be set when telemetry is set.
-  # If deploying with tracing, make sure the telemetry object is set to {}.
+  # If deploying with tracing, uncomment the following object and set the telemetry object to {}.
   tracing:
-    # Disable tracing for all services.
-    # Note: This configurable will be removed in version 1.5
-    disable: false
-  
     # The address of a tracing server deployed in your Kubernetes cluster.
     # Address should be in the format <service-name>.<namespace>:<service_port>.
     address: "jaeger-agent.monitor:6831"
@@ -154,7 +155,6 @@ HELMをinstallします。
     # The sample rate to use for tracing. Float between 0 and 1.
     sampleRate: 1
   
-  # Mutual TLS settings. See https://docs.nginx.com/nginx-service-mesh/guides/secure-traffic-mtls for more info.
   mtls:
     # mTLS mode for pod-to-pod communication.
     # Valid values: off, permissive, strict
@@ -164,10 +164,9 @@ HELMをinstallします。
     # Valid values: on, off
     persistentStorage: "off"
 
-- | 11行目でGrafanaのDeployを無効に、40行目でJaegerのDeployを無効にします
-  | (コメント欄に記載の通り、Jaegerのパラメータは NSM v1.5で削除されます)
-- 24行目でPrometheus、44行目・48行目でJaegerの設定を指定します
-- この例ではTraceの情報の結果を容易に確認するため、SampleRate 1 と指定します
+- 29行目でPrometheus、45行目・49行目でJaegerの設定を指定します
+- 52行目ですが、この例ではTraceの情報の結果を容易に確認するため、SampleRate 1 と指定します
+- 33,37行目 Injectの対象となるNamespaceを指定
 
 NSMをデプロイします
 
