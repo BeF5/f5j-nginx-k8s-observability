@@ -132,6 +132,8 @@ Lokiはデプロイ時点で設定されています。以下のような結果�
   kubectl apply -f waf.yaml -n staging
   kubectl apply -f staging-bookinfo-nap-vs.yaml
 
+デプロイした結果を確認します
+
 .. code-block:: cmdin
 
   kubectl get vs -A
