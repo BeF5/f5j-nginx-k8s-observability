@@ -48,7 +48,7 @@ HELMをinstallします。
   :linenos:
   :caption: 実行結果サンプル
   
-  version.BuildInfo{Version:"v3.9.0", GitCommit:"7ceeda6c585217a19a1131663d8cd1f7d641b2a7", GitTreeState:"clean", GoVersion:"go1.17.5"}
+  version.BuildInfo{Version:"v3.10.2", GitCommit:"50f003e5ee8704ec937a756c646870227d7c8b58", GitTreeState:"clean", GoVersion:"go1.18.8"}
 
 
 必要なファイルを取得します
@@ -66,7 +66,7 @@ HELMをinstallします。
 .. code-block:: cmdin
 
   cd ~/
-  git clone https://github.com/nginxinc/nginx-service-mesh --branch v1.4.1
+  git clone https://github.com/nginxinc/nginx-service-mesh --branch v1.6.0
   cd ~/nginx-service-mesh
 
 取得した内容が意図したVersionであることを確認します
@@ -80,14 +80,15 @@ HELMをinstallします。
   :linenos:
   :caption: 実行結果サンプル
 
-  commit c605618f6226926c3a0c2b0984a44f8844ae1d75 (HEAD, tag: v1.4.1, origin/main, origin/HEAD)
-  Merge: 263f119 7ee8afd
-  Author: Pamme <pammecrandall@yahoo.com>
-  Date:   Thu May 26 12:42:52 2022 -0600
+  commit bb6d6f4e8443deda81932057d0f97d9ab4f6e23a (HEAD, tag: v1.6.0, origin/main, origin/HEAD)
+  Merge: e0297f0 066bc5d
+  Author: Saylor Berman <s.berman@f5.com>
+  Date:   Tue Nov 1 12:06:58 2022 -0600
   
-      Merge pull request #68 from nginxinc/release-1.4.1
+      Merge pull request #82 from nginxinc/release-1.6.0
   
-      Helm release - 1.4.1
+      Helm release - 1.6.0
+
 
 | HelmでNSMをセットアップする際に用いる、パラメータの内容を確認します。
 | Defaultの値は `GitHub nginx-service-mesh/helm-chart/values.yaml <https://github.com/nginxinc/nginx-service-mesh/blob/main/helm-chart/values.yaml>`__ の内容を確認してください。
@@ -194,7 +195,7 @@ NSMをデプロイします
   REVISION: 1
   TEST SUITE: None
   NOTES:
-  NGINX Service Mesh has been installed. Ensure all NGINX Service Mesh Pods are in the Ready state before deploying yo                              ur apps.
+  NGINX Service Mesh has been installed. Ensure all NGINX Service Mesh Pods are in the Ready state before deploying your apps.
 
 デプロイの結果を確認します
 
@@ -236,7 +237,7 @@ Podが正しく作成され、以下のようになることを確認してく�
 .. code-block:: cmdin
 
   cd ~/
-  git clone https://github.com/nginxinc/kubernetes-ingress.git --branch v2.2.2
+  git clone https://github.com/nginxinc/kubernetes-ingress.git --branch v2.4.1
   cd ~/kubernetes-ingress/
 
 取得した内容が意図したVersionであることを確認します
@@ -250,12 +251,13 @@ Podが正しく作成され、以下のようになることを確認してく�
   :linenos:
   :caption: 実行結果サンプル
 
-  commit a88b7fe6dbde5df79593ac161749afc1e9a009c6 (HEAD, tag: v2.2.2)
-  Author: Luca Comellini <luca.com@gmail.com>
-  Date:   Mon May 23 12:56:33 2022 -0700
+  commit 413c0bb5761b1796d2e8490f4bb34881e144ab8d (HEAD, tag: v2.4.1)
+  Author: Jakub Jarosz <99677300+jjngx@users.noreply.github.com>
+  Date:   Thu Oct 20 00:07:37 2022 +0100
   
-      Release 2.2.2 (#2711)
-
+      Release 2.4.1 (#3184)
+  
+      Co-authored-by: Luca Comellini <luca.com@gmail.com>
 
 NAP DoS の Arbitator をデプロイします
 
@@ -312,11 +314,11 @@ Podが正しく作成され、以下のようになることを確認してく�
   cd ~/kubernetes-ingress/
   cp ~/nginx-repo* .
   ls nginx-repo.*
-  make debian-image-nap-dos-plus PREFIX=registry.example.com/root/nic/nginxplus-ingress-nap-dos TARGET=container TAG=2.2.2
+  make debian-image-nap-dos-plus PREFIX=registry.example.com/root/nic/nginxplus-ingress-nap-dos TARGET=container TAG=2.4.1
   docker login registry.example.com
    Username: root       << 左の文字列を入力
    Password: password   << 左の文字列を入力
-  docker push registry.example.com/root/nic/nginxplus-ingress-nap-dos:2.2.2
+  docker push registry.example.com/root/nic/nginxplus-ingress-nap-dos:2.4.1
 
 NICをデプロイします。
 
@@ -343,7 +345,7 @@ NICをデプロイします。
     nginxplus: true
     image:
       repository: registry.example.com/root/nic/nginxplus-ingress-nap-dos
-      tag: "2.2.2"
+      tag: "2.4.1"
   
     ## Support for App Protect
     appprotect:
@@ -429,7 +431,7 @@ nic1 との差分を中心に確認します
     nginxplus: true
     image:
       repository: registry.example.com/root/nic/nginxplus-ingress-nap-dos
-      tag: "2.2.2"
+      tag: "2.4.1"
   
     ## Support for App Protect
     appprotect:
