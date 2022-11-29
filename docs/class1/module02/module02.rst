@@ -56,7 +56,7 @@ HELMをinstallします。
 .. code-block:: cmdin
   
   cd ~/
-  git clone https://github.com/BeF5/f5j-nginx-observability-lab.git
+  git clone https://github.com/BeF5/f5j-nginx-observability-lab.git --branch v1.0.0
 
 2. NSMのセットアップ
 ====
@@ -99,7 +99,16 @@ HELMをinstallします。
 .. code-block:: bash
   :linenos:
   :caption: 実行結果サンプル
-  :emphasize-lines: 11,20,24,28,32,40,44,48,51,76
+  :emphasize-lines: 20,29,33,37,41,49,53,57,60,85
+
+  registry:
+    # Hostname:port (if needed) for registry and path to images. 
+    # Affects: nginx-mesh-api, nginx-mesh-cert-reloader, nginx-mesh-init, nginx-mesh-metrics, nginx-mesh-sidecar
+    server: "docker-registry.nginx.com/nsm"
+  
+    # Tag used for pulling images from registry
+    # Affects: nginx-mesh-api, nginx-mesh-cert-reloader, nginx-mesh-init, nginx-mesh-metrics, nginx-mesh-sidecar
+    imageTag: "1.4.1"
 
   # Environment to deploy the mesh into.
   # Valid values: kubernetes, openshift
@@ -163,9 +172,9 @@ HELMをinstallします。
     # Valid values: on, off
     persistentStorage: "off"
 
-- | 11行目でGrafanaのDeployを無効に、40行目でJaegerのDeployを無効にします
+- | 20行目でGrafanaのDeployを無効に、49行目でJaegerのDeployを無効にします
   | (コメント欄に記載の通り、Jaegerのパラメータは NSM v1.5で削除されます)
-- 24行目でPrometheus、44行目・48行目でJaegerの設定を指定します
+- 33行目でPrometheus、53行目・57行目でJaegerの設定を指定します
 - この例ではTraceの情報の結果を容易に確認するため、SampleRate 1 と指定します
 
 NSMをデプロイします
