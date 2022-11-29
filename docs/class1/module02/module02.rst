@@ -56,7 +56,7 @@ HELMをinstallします。
 .. code-block:: cmdin
   
   cd ~/
-  git clone https://github.com/BeF5/f5j-nginx-observability-lab.git --branch v1.0.0
+  git clone https://github.com/BeF5/f5j-nginx-observability-lab.git --branch v1.0.1
 
 2. NSMのセットアップ
 ====
@@ -66,7 +66,7 @@ HELMをinstallします。
 .. code-block:: cmdin
 
   cd ~/
-  git clone https://github.com/nginxinc/nginx-service-mesh --branch v1.6.0
+  git clone https://github.com/nginxinc/nginx-service-mesh --branch v1.4.1
   cd ~/nginx-service-mesh
 
 取得した内容が意図したVersionであることを確認します
@@ -80,14 +80,14 @@ HELMをinstallします。
   :linenos:
   :caption: 実行結果サンプル
 
-  commit bb6d6f4e8443deda81932057d0f97d9ab4f6e23a (HEAD, tag: v1.6.0, origin/main, origin/HEAD)
-  Merge: e0297f0 066bc5d
-  Author: Saylor Berman <s.berman@f5.com>
-  Date:   Tue Nov 1 12:06:58 2022 -0600
+  commit c605618f6226926c3a0c2b0984a44f8844ae1d75 (HEAD, tag: v1.4.1, origin/main, origin/HEAD)
+  Merge: 263f119 7ee8afd
+  Author: Pamme <pammecrandall@yahoo.com>
+  Date:   Thu May 26 12:42:52 2022 -0600
   
-      Merge pull request #82 from nginxinc/release-1.6.0
+      Merge pull request #68 from nginxinc/release-1.4.1
   
-      Helm release - 1.6.0
+      Helm release - 1.4.1
 
 
 | HelmでNSMをセットアップする際に用いる、パラメータの内容を確認します。
@@ -111,22 +111,17 @@ HELMをinstallします。
     # Affects: nginx-mesh-api, nginx-mesh-cert-reloader, nginx-mesh-init, nginx-mesh-metrics, nginx-mesh-sidecar
     imageTag: "1.4.1"
 
-  # NGINX Service Mesh image registry settings.
-  registry:
-    # Hostname:port (if needed) for registry and path to images.
-    # Affects: nginx-mesh-api, nginx-mesh-cert-reloader, nginx-mesh-init, nginx-mesh-metrics, nginx-mesh-sidecar
-    server: "docker-registry.nginx.com/nsm"
-  
-    # Tag used for pulling images from registry
-    # Affects: nginx-mesh-api, nginx-mesh-cert-reloader, nginx-mesh-init, nginx-mesh-metrics, nginx-mesh-sidecar
-    imageTag: "1.6.0"
-  
   # Environment to deploy the mesh into.
   # Valid values: kubernetes, openshift
   environment: "kubernetes"
   
   # Enable UDP traffic proxying (beta). Linux kernel 4.18 or greater is required.
   enableUDP: false
+  
+  # Deploy Grafana as a part of the NGINX Service Mesh.
+  # Note: This configurable will be removed in version 1.5
+  # Valid values: true, false
+  deployGrafana: false
   
   # NGINX log format.
   # Valid values: default, json
@@ -141,18 +136,22 @@ HELMをinstallします。
   # Address should be in the format <service-name>.<namespace>:<service-port>.
   prometheusAddress: "prometheus-server.monitor:80"
   
-  # Globally disable automatic sidecar injection upon resource creation.
-  # Use either "enabledNamespaces" or a namespace label to enable automatic injection.
-  disableAutoInjection: true
+  # NGINX Service Mesh auto-injection settings.
+  autoInjection:
+    disable: true
   
-  # Enable automatic sidecar injection for specific namespaces.
-  # Must be used with "disableAutoInjection".
-  enabledNamespaces: [ staging , prod ]
+    # Enable automatic sidecar injection for specific namespaces.
+    # Must be used with "disable".
+    enabledNamespaces: [ staging , prod ]
   
-  # NGINX Service Mesh tracing settings. Deprecated in favor of telemetry.
+  # NGINX Service Mesh tracing settings.
   # Cannot be set when telemetry is set.
-  # If deploying with tracing, uncomment the following object and set the telemetry object to {}.
+  # If deploying with tracing, make sure the telemetry object is set to {}.
   tracing:
+    # Disable tracing for all services.
+    # Note: This configurable will be removed in version 1.5
+    disable: false
+  
     # The address of a tracing server deployed in your Kubernetes cluster.
     # Address should be in the format <service-name>.<namespace>:<service_port>.
     address: "jaeger-agent.monitor:6831"
@@ -164,6 +163,7 @@ HELMをinstallします。
     # The sample rate to use for tracing. Float between 0 and 1.
     sampleRate: 1
   
+  # Mutual TLS settings. See https://docs.nginx.com/nginx-service-mesh/guides/secure-traffic-mtls for more info.
   mtls:
     # mTLS mode for pod-to-pod communication.
     # Valid values: off, permissive, strict
@@ -240,8 +240,6 @@ Podが正しく作成され、以下のようになることを確認してく�
 ====
 
 必要なファイルを取得します
-
-ファイルを取得します
 
 .. code-block:: cmdin
 
