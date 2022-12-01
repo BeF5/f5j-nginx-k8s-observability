@@ -258,11 +258,11 @@ Podが正しく作成され、以下のようになることを確認してく�
   :linenos:
   :caption: 実行結果サンプル
 
-commit a88b7fe6dbde5df79593ac161749afc1e9a009c6 (HEAD, tag: v2.2.2)
-Author: Luca Comellini <luca.com@gmail.com>
-Date:   Mon May 23 12:56:33 2022 -0700
-
-    Release 2.2.2 (#2711)
+  commit a88b7fe6dbde5df79593ac161749afc1e9a009c6 (HEAD, tag: v2.2.2)
+  Author: Luca Comellini <luca.com@gmail.com>
+  Date:   Mon May 23 12:56:33 2022 -0700
+  
+      Release 2.2.2 (#2711)
 
 NAP DoS の Arbitator をデプロイします
 
