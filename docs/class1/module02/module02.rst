@@ -244,7 +244,7 @@ Podが正しく作成され、以下のようになることを確認してく�
 .. code-block:: cmdin
 
   cd ~/
-  git clone https://github.com/nginxinc/kubernetes-ingress.git --branch v2.4.1
+  git clone https://github.com/nginxinc/kubernetes-ingress.git --branch v2.2.2
   cd ~/kubernetes-ingress/
 
 取得した内容が意図したVersionであることを確認します
@@ -258,13 +258,11 @@ Podが正しく作成され、以下のようになることを確認してく�
   :linenos:
   :caption: 実行結果サンプル
 
-  commit 413c0bb5761b1796d2e8490f4bb34881e144ab8d (HEAD, tag: v2.4.1)
-  Author: Jakub Jarosz <99677300+jjngx@users.noreply.github.com>
-  Date:   Thu Oct 20 00:07:37 2022 +0100
-  
-      Release 2.4.1 (#3184)
-  
-      Co-authored-by: Luca Comellini <luca.com@gmail.com>
+commit a88b7fe6dbde5df79593ac161749afc1e9a009c6 (HEAD, tag: v2.2.2)
+Author: Luca Comellini <luca.com@gmail.com>
+Date:   Mon May 23 12:56:33 2022 -0700
+
+    Release 2.2.2 (#2711)
 
 NAP DoS の Arbitator をデプロイします
 
@@ -321,11 +319,11 @@ Podが正しく作成され、以下のようになることを確認してく�
   cd ~/kubernetes-ingress/
   cp ~/nginx-repo* .
   ls nginx-repo.*
-  make debian-image-nap-dos-plus PREFIX=registry.example.com/root/nic/nginxplus-ingress-nap-dos TARGET=container TAG=2.4.1
+  make debian-image-nap-dos-plus PREFIX=registry.example.com/root/nic/nginxplus-ingress-nap-dos TARGET=container TAG=2.2.2
   docker login registry.example.com
    Username: root       << 左の文字列を入力
    Password: password   << 左の文字列を入力
-  docker push registry.example.com/root/nic/nginxplus-ingress-nap-dos:2.4.1
+  docker push registry.example.com/root/nic/nginxplus-ingress-nap-dos:2.2.2
 
 NICをデプロイします。
 
@@ -352,7 +350,7 @@ NICをデプロイします。
     nginxplus: true
     image:
       repository: registry.example.com/root/nic/nginxplus-ingress-nap-dos
-      tag: "2.4.1"
+      tag: "2.2.2"
   
     ## Support for App Protect
     appprotect:
@@ -438,7 +436,7 @@ nic1 との差分を中心に確認します
     nginxplus: true
     image:
       repository: registry.example.com/root/nic/nginxplus-ingress-nap-dos
-      tag: "2.4.1"
+      tag: "2.2.2"
   
     ## Support for App Protect
     appprotect:
@@ -524,7 +522,7 @@ NICをそれぞれデプロイします
   NAME                    NAMESPACE       REVISION        UPDATED                                 STATUS          CHART                                     APP VERSION
   appdos-arbitrator       nginx-ingress   1               2022-06-28 22:45:48.828679008 +0000 UTC deployed        nginx-appprotect-dos-arbitrator-0.1.0     1.1.0
   nic1                    nginx-ingress   1               2022-06-30 07:43:18.437887299 +0000 UTC deployed        nginx-ingress-0.13.2                      2.2.2
-  nic2                    nginx-ingress   1               2022-06-30 07:44:26.615809096 +0000 UTC deployed 
+  nic2                    nginx-ingress   1               2022-06-30 07:44:26.615809096 +0000 UTC deployed        nginx-ingress-0.13.2                      2.2.2
 
 Podが正しく作成されていることを確認します
 
