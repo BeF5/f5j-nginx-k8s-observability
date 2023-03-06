@@ -17,6 +17,12 @@
 | 参照：\ `UDF Supported Browsers and Clients <https://help.udf.f5.com/en/articles/3470266-supported-browsers-and-clients>`__
 
 
+ラボ環境構成図
+----
+
+   .. image:: ./media/udflab_k8s_Lab_jp.png
+      :width: 400
+      
 Windows Jump HostへのRDP接続
 ----------------------------
 
@@ -44,6 +50,7 @@ Clientのショートカットがありますので、そちらをダブルク�
 
    - .. image:: ./media/putty_menu_kic.jpg
       :width: 200
+
 
 HELMについて
 ====
