@@ -22,6 +22,16 @@ F5 Labs - Index
 
 - `PrometheusとGrafanaでNGINX Plusを可視化する方法 <https://www.nginx.co.jp/blog/how-to-visualize-nginx-plus-with-prometheus-and-grafana/>`__
 
+
+
+NGINX セットアップガイド トップページ
+====
+
+NGINX のその他ラボガイドは以下を参照してください
+
+- `NGINX セットアップガイド・ラボガイド <https://f5j-tech-info.readthedocs.io/ja/latest/content03/content3.html>`__
+
+
 .. toctree::
    :maxdepth: 3
    :caption: Lab Contents:
