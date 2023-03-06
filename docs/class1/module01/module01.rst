@@ -20,9 +20,10 @@
 ラボ環境構成図
 ----
 
-   .. image:: ./media/udflab_k8s_Lab_jp.png
+   .. image:: ./media/udflab_k8s_mesh_Lab_jp.png
       :width: 400
-      
+
+
 Windows Jump HostへのRDP接続
 ----------------------------
 
