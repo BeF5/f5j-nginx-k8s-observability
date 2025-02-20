@@ -112,6 +112,8 @@ Prometheusの設定を確認します。
   alertmanager:
     persistentVolume:
       enabled: false
+    persistence:
+      enabled: false
   server:
     persistentVolume:
       enabled: false
@@ -206,11 +208,12 @@ Podが正しく作成されていることを確認します
   :linenos:
   :caption: 実行結果サンプル
 
-  prometheus-alertmanager-6b5498dfc7-l5pdj        2/2     Running   0          70s
-  prometheus-kube-state-metrics-748fc7f64-scxqh   1/1     Running   0          69s
-  prometheus-node-exporter-wqh9d                  1/1     Running   0          70s
-  prometheus-pushgateway-b6c9dc7db-6xgb4          1/1     Running   0          69s
-  prometheus-server-656659dfc6-fkwwm              2/2     Running   0          69s
+  prometheus-alertmanager-0                            1/1     Running   0          12m
+  prometheus-kube-state-metrics-5bc9f6d676-t2bqj       1/1     Running   0          12m
+  prometheus-prometheus-node-exporter-ckmps            1/1     Running   0          12m
+  prometheus-prometheus-node-exporter-fdx7v            1/1     Running   0          12m
+  prometheus-prometheus-pushgateway-7ff8445d6f-z9ltt   1/1     Running   0          12m
+  prometheus-server-74b7fcc9fc-5dfg9                   2/2     Running   0          12m
 
 
 2. Grafana Lokiのデプロイ
