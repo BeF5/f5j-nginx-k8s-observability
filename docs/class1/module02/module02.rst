@@ -511,10 +511,10 @@ NICをそれぞれデプロイします
   :linenos:
   :caption: 実行結果サンプル
 
-  NAME                    NAMESPACE       REVISION        UPDATED                                 STATUS          CHART                                     APP VERSION
-  appdos-arbitrator       nginx-ingress   1               2022-06-28 22:45:48.828679008 +0000 UTC deployed        nginx-appprotect-dos-arbitrator-0.1.0     1.1.0
-  nic1                    nginx-ingress   1               2022-06-30 07:43:18.437887299 +0000 UTC deployed        nginx-ingress-0.13.2                      2.2.2
-  nic2                    nginx-ingress   1               2022-06-30 07:44:26.615809096 +0000 UTC deployed 
+  NAME                    NAMESPACE       REVISION        UPDATED                                 STATUS          CHART                                   APP VERSION
+  appdos-arbitrator       nginx-ingress   1               2024-12-26 11:28:09.549936455 +0900 JST deployed        nginx-appprotect-dos-arbitrator-0.1.0   1.1.0      
+  nic1                    nginx-ingress   1               2024-12-26 11:43:47.022460423 +0900 JST deployed        nginx-ingress-0.15.1                    2.4.1      
+  nic2                    nginx-ingress   1               2024-12-26 11:43:56.851796991 +0900 JST deployed        nginx-ingress-0.15.1                    2.4.1   
 
 Podが正しく作成されていることを確認します
 
