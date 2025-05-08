@@ -478,6 +478,8 @@ Jaegerについては以下を参照してください。
     enabled: false
   agent:
     enabled: false
+  storage:
+    type: memory
 
 - 6-7行目で ``allInOne`` の形式でデプロイすることを指定し、その他パラメータで不要な設定を解除します
 
