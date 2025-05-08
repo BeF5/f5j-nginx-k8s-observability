@@ -61,7 +61,7 @@
 
 - `http://grafana.example.com:8080/ <http://grafana.example.com:8080/>`__
 
-ログイン画面が表示されます。
+ログイン画面が表示されます。なお、インストールするバージョンによりビジュアルが異なる場合があります。
 
    .. image:: ./media/grafana-login.jpg
       :width: 400
